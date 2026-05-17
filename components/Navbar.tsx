@@ -34,15 +34,15 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <Image src="/logo.png" alt="Lightsofter logo" width={36} height={36} className="rounded-xl shadow-md group-hover:opacity-90 transition-opacity" priority />
-          <span className="font-bold text-xl text-gray-900">
-            light<span className="text-purple-700">softer</span>
+          <span className={`font-bold text-xl transition-colors duration-300 ${scrolled ? 'text-gray-900' : 'text-white'}`}>
+            light<span className={scrolled ? 'text-purple-700' : 'text-purple-400'}>softer</span>
           </span>
         </Link>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
           {links.map(l => (
-            <Link key={l.href} href={l.href} className="text-gray-600 hover:text-purple-700 font-medium transition-colors text-sm">
+            <Link key={l.href} href={l.href} className={`font-medium transition-colors text-sm ${scrolled ? 'text-gray-600 hover:text-purple-700' : 'text-white/70 hover:text-white'}`}>
               {l.label}
             </Link>
           ))}
@@ -57,8 +57,8 @@ export default function Navbar() {
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden p-2 rounded-lg hover:bg-purple-50 transition-colors" onClick={() => setOpen(!open)} aria-label="Menu">
-          {open ? <X className="w-5 h-5 text-gray-700" /> : <Menu className="w-5 h-5 text-gray-700" />}
+        <button className="md:hidden p-2 rounded-lg transition-colors" onClick={() => setOpen(!open)} aria-label="Menu">
+          {open ? <X className={`w-5 h-5 ${scrolled ? 'text-gray-700' : 'text-white'}`} /> : <Menu className={`w-5 h-5 ${scrolled ? 'text-gray-700' : 'text-white'}`} />}
         </button>
       </div>
 
