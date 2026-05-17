@@ -74,7 +74,7 @@ export const projects: Project[] = [
     city: 'Bordeaux',
     country: 'France',
     flag: '🇫🇷',
-    result: 'E-commerce lancé en 5 jours',
+    result: 'E-commerce lancé en 2-3 jours',
     color: 'from-pink-400 to-rose-500',
     tagline: 'Une boutique de mode bordelaise qui vend désormais dans toute la France.',
     challenge:
@@ -83,11 +83,11 @@ export const projects: Project[] = [
       'Boutique e-commerce complète avec catalogue 120 produits, paiement Stripe, gestion des stocks et livraison Colissimo intégrée. Interface admin ultra-simple pour gérer les commandes.',
     stack: ['Next.js', 'Stripe', 'Tailwind CSS', 'Vercel'],
     metrics: [
-      { label: 'Lancement', value: '5 jours' },
+      { label: 'Lancement', value: '2-3 jours' },
       { label: 'Premières ventes', value: 'J+2' },
       { label: 'Taux conversion', value: '3.2%' },
     ],
-    duration: '5 jours',
+    duration: '2-3 jours',
     year: '2024',
   },
   {
@@ -133,9 +133,9 @@ export const projects: Project[] = [
     metrics: [
       { label: 'Contacts entrants', value: '+60%' },
       { label: 'Position Google', value: 'Top 5' },
-      { label: 'Délai livraison', value: '5 jours' },
+      { label: 'Délai livraison', value: '2-3 jours' },
     ],
-    duration: '5 jours',
+    duration: '2-3 jours',
     year: '2024',
   },
   {

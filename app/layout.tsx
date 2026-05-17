@@ -8,13 +8,13 @@ import { LangProvider } from '@/components/LangProvider'
 
 export const metadata: Metadata = {
   title: 'Lightsofter — Sites Web & Applications Mobiles | France & Belgique',
-  description: 'Création de sites web professionnels et applications mobiles pour les PME en France et Belgique. Livraison en 5 jours, prix transparent, devis gratuit en 24h.',
+  description: 'Création de sites web professionnels et applications mobiles pour les PME en France et Belgique. Livraison en 2-3 jours, prix transparent, devis gratuit en 24h.',
   keywords: 'création site web PME France, agence web Belgique, application Android, développement web rapide, site vitrine professionnel',
   metadataBase: new URL('https://lightsofter.vercel.app'),
   alternates: { canonical: 'https://lightsofter.vercel.app' },
   openGraph: {
-    title: 'Lightsofter — Sites Web & Apps en 5 jours',
-    description: 'Votre site web professionnel livré en 5 jours. Sites, apps Android, web apps pour PME françaises et belges.',
+    title: 'Lightsofter — Sites Web & Apps en 2-3 jours',
+    description: 'Votre site web professionnel livré en 2-3 jours. Sites, apps Android, web apps pour PME françaises et belges.',
     type: 'website',
     url: 'https://lightsofter.vercel.app',
     siteName: 'Lightsofter',
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Lightsofter — Sites Web & Apps en 5 jours',
-    description: 'Votre site web professionnel livré en 5 jours.',
+    title: 'Lightsofter — Sites Web & Apps en 2-3 jours',
+    description: 'Votre site web professionnel livré en 2-3 jours.',
     images: ['/logo.png'],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },

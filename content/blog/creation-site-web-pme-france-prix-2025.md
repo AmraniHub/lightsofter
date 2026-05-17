@@ -26,7 +26,7 @@ Wix, Squarespace, Shopify : accessibles mais limités. Vous êtes dépendant de 
 
 **4. Les agences template-first (490 € à 990 €)**
 
-Un nouveau modèle d'agence qui livre des sites professionnels en 3 à 5 jours en s'appuyant sur des systèmes de templates optimisés. Prix fixe, délai garanti, qualité pro. C'est ce que propose Lightsofter.
+Un nouveau modèle d'agence qui livre des sites professionnels en 2-3 jours en s'appuyant sur des systèmes de templates optimisés. Prix fixe, délai garanti, qualité pro. C'est ce que propose Lightsofter.
 
 ---
 
@@ -37,7 +37,7 @@ Un nouveau modèle d'agence qui livre des sites professionnels en 3 à 5 jours e
 | Grande agence | 5 000–20 000 € | 2–6 mois | Élevée | Bon | Payant |
 | Freelance | 1 500–5 000 € | 3–8 semaines | Moyenne | Variable | Limité |
 | No-code | 20–50 €/mois | 1–2 semaines | Faible | Moyen | Email |
-| Agence template | 490–990 € | 3–5 jours | Bonne | Optimisé | Inclus |
+| Agence template | 490–990 € | 2-3 jours | Bonne | Optimisé | Inclus |
 
 ---
 
@@ -70,6 +70,6 @@ Avant de comparer les prix, vérifiez toujours ce qui est inclus :
 
 Si vous êtes une PME avec un budget entre 490 et 1 500 € et que vous avez besoin d'un site professionnel rapidement, l'approche template-first est aujourd'hui le meilleur rapport qualité/prix/délai du marché.
 
-Chez **Lightsofter**, on livre des sites vitrine à partir de 490 € en 3 à 5 jours, avec hébergement inclus la première année, SEO de base, et support WhatsApp. Le devis est gratuit et envoyé en 24h.
+Chez **Lightsofter**, on livre des sites vitrine à partir de 490 € en 2-3 jours, avec hébergement inclus la première année, SEO de base, et support WhatsApp. Le devis est gratuit et envoyé en 24h.
 
 [Obtenir un devis gratuit →](https://lightsofter.vercel.app/#devis)

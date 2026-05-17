@@ -41,7 +41,7 @@ export default function AboutPage() {
               </p>
               <p>
                 On a construit un système de templates et d&apos;automatisation qui nous permet de
-                livrer des sites web de qualité en 5 jours, à des prix accessibles aux PME.
+                livrer des sites web de qualité en 2-3 jours, à des prix accessibles aux PME.
                 Pas de compromis sur la qualité — juste moins de temps perdu.
               </p>
               <p>

@@ -85,7 +85,7 @@ const KEYWORD_CLUSTERS = [
     quora: 'Quelle application Android choisir pour gérer ses clients en tant qu\'artisan ?',
   },
   {
-    keyword: 'agence web livraison rapide 5 jours site pro',
+    keyword: 'agence web livraison rapide 2-3 jours site pro',
     category: 'Guide',
     subreddits: ['r/webdesign', 'r/france'],
     quora: 'Est-il possible de créer un site web professionnel en moins d\'une semaine ?',
@@ -155,7 +155,7 @@ RÈGLES STRICTES :
 4. L'article doit faire entre 800 et 1200 mots
 5. Utilise des sous-titres H2 et H3 (##, ###)
 6. Ajoute un tableau comparatif si pertinent
-7. Termine par un appel à l'action vers Lightsofter (agence web livraison en 5 jours)
+7. Termine par un appel à l'action vers Lightsofter (agence web livraison en 2-3 jours)
 8. Ton : professionnel mais accessible, pratique, concret
 9. Catégorie : ${cluster.category}
 

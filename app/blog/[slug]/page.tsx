@@ -114,7 +114,7 @@ export default function BlogPostPage({ params }: Props) {
           {/* CTA */}
           <div className="mt-16 bg-gradient-to-br from-purple-900 to-violet-800 rounded-3xl p-8 text-center">
             <h3 className="text-2xl font-black text-white mb-2">Prêt à lancer votre projet ?</h3>
-            <p className="text-purple-200 mb-6">Devis gratuit en 24h. Livraison en 5 jours.</p>
+            <p className="text-purple-200 mb-6">Devis gratuit en 24h. Livraison en 2-3 jours.</p>
             <Link href="/#devis" className="inline-flex items-center gap-2 bg-white text-purple-700 font-bold px-7 py-3.5 rounded-2xl hover:bg-purple-50 transition-all shadow-lg">
               Obtenir un devis gratuit <ArrowRight className="w-4 h-4" />
             </Link>

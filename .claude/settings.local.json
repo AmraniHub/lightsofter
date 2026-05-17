@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "PowerShell(gh --version)",
-      "PowerShell(npx vercel --version 2>&1)"
+      "PowerShell(npx vercel --version 2>&1)",
+      "Bash(npx next *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(Test-Path \"C:\\\\Users\\\\Elamr\\\\Music\\\\APPS\\\\WebTM\\\\.env.local\")",
+      "Bash(git add *)",
+      "Bash(npm uninstall *)",
+      "Bash(git commit *)",
+      "mcp__a9bb97c7-ca35-4719-8ddc-813d5b140d68__create_file",
+      "Bash(npm install *)"
     ]
   }
 }
