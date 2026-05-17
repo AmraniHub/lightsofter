@@ -66,43 +66,99 @@ RULES:
 6. Maximum 1 emoji per message`
 }
 
+// ── Regex ────────────────────────────────────────────────────────────────────
 const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/
-const PHONE_RE = /(?:\+?[\d][\d\s\-().]{6,}[\d])/
+const PHONE_RE = /(?:\+?[\d][\d\s\-(). ]{6,}[\d])/
 
-async function captureLead(message: string, email?: string, phone?: string) {
+// ── Extract name from full conversation ──────────────────────────────────────
+function extractName(messages: { role: string; content: string }[]): string {
+  const userText = messages
+    .filter(m => m.role === 'user')
+    .map(m => m.content)
+    .join(' ')
+
+  const patterns = [
+    /je m['']appelle\s+([A-ZÀ-Öa-zà-ö]{2,20})/i,
+    /mon prénom(?: est)?\s+([A-ZÀ-Öa-zà-ö]{2,20})/i,
+    /c['']est\s+([A-ZÀ-Öa-zà-ö]{2,20})/i,
+    /prénom\s*[:\-]?\s*([A-ZÀ-Öa-zà-ö]{2,20})/i,
+    /my name is\s+([A-Za-z]{2,20})/i,
+    /i['']?m\s+([A-Z][a-z]{2,20})/i,
+    /call me\s+([A-Za-z]{2,20})/i,
+    /name\s*[:\-]?\s*([A-Za-z]{2,20})/i,
+  ]
+  for (const p of patterns) {
+    const m = userText.match(p)
+    if (m?.[1]) return m[1]
+  }
+  return ''
+}
+
+// ── Build short project summary from user messages ───────────────────────────
+function buildSummary(messages: { role: string; content: string }[]): string {
+  return messages
+    .filter(m => m.role === 'user')
+    .map(m => m.content.trim())
+    .join(' › ')
+    .substring(0, 500)
+}
+
+// ── Send lead to Telegram + Google Sheets ────────────────────────────────────
+async function captureLead(opts: {
+  email?: string
+  phone?: string
+  name?: string
+  summary: string
+  locale: string
+}) {
+  const { email, phone, name, summary, locale } = opts
   const token = process.env.TELEGRAM_BOT_TOKEN
   const chatId = process.env.TELEGRAM_CHAT_ID
+  const sheetsUrl = process.env.GOOGLE_SHEETS_WEBHOOK
 
+  const date = new Date().toLocaleString(locale === 'en' ? 'en-GB' : 'fr-FR', { timeZone: 'Europe/Paris' })
+
+  // ── Telegram ──────────────────────────────────────────────────────────────
   if (token && chatId) {
-    const text = [
+    const lines: string[] = [
       `🔥 <b>Nouveau lead — Chatbot Lightsofter</b>`,
       ``,
-      email ? `📧 ${email}` : '',
-      phone ? `📞 ${phone}` : '',
-      `💬 "${message.substring(0, 200)}"`,
-      `🕐 ${new Date().toLocaleString('fr-FR')}`,
-    ].filter(Boolean).join('\n')
+      name  ? `👤 <b>${name}</b>`  : '',
+      email ? `📧 ${email}`        : '',
+      phone ? `📞 ${phone}`        : '',
+      ``,
+      `💬 <b>Conversation :</b>`,
+      `<i>${summary.substring(0, 300)}</i>`,
+      ``,
+      `🕐 ${date}`,
+      `🌐 Source : chatbot`,
+    ]
 
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: lines.filter(Boolean).join('\n'),
+        parse_mode: 'HTML',
+      }),
     }).catch(() => {})
   }
 
-  const sheetsUrl = process.env.GOOGLE_SHEETS_WEBHOOK
+  // ── Google Sheets ─────────────────────────────────────────────────────────
   if (sheetsUrl) {
     const params = new URLSearchParams({
-      name: 'Chat lead',
-      email: email || '',
-      phone: phone || '',
-      project: message.substring(0, 300),
-      source: 'chatbot',
+      name:    name    || 'Chat lead',
+      email:   email   || '',
+      phone:   phone   || '',
+      project: summary.substring(0, 400),
+      source:  'chatbot',
     })
-    await fetch(`${sheetsUrl}?${params}`).catch(() => {})
+    await fetch(`${sheetsUrl}?${params.toString()}`).catch(() => {})
   }
 }
 
+// ── POST ─────────────────────────────────────────────────────────────────────
 export async function POST(req: Request) {
   try {
     const { message, history = [], locale = 'fr' } = await req.json()
@@ -111,13 +167,15 @@ export async function POST(req: Request) {
     const apiKey = process.env.ANTHROPIC_API_KEY
     if (!apiKey) return NextResponse.json({ reply: 'Service temporairement indisponible.' })
 
-    const messages = [
-      ...history.slice(-8).map((m: { role: string; content: string }) => ({
-        role: m.role,
-        content: m.content,
-      })),
+    const allUserMessages = [
+      ...history,
       { role: 'user', content: message },
-    ]
+    ] as { role: string; content: string }[]
+
+    const claudeMessages = allUserMessages.slice(-10).map(m => ({
+      role: m.role,
+      content: m.content,
+    }))
 
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -130,7 +188,7 @@ export async function POST(req: Request) {
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 350,
         system: buildSystemPrompt(locale),
-        messages,
+        messages: claudeMessages,
       }),
     })
 
@@ -139,11 +197,20 @@ export async function POST(req: Request) {
     const data = await res.json()
     const reply: string = data.content?.[0]?.text ?? ''
 
-    // Lead detection — check user message
+    // ── Lead detection across current message ─────────────────────────────
     const emailMatch = message.match(EMAIL_RE)
     const phoneMatch = message.match(PHONE_RE)
+
     if (emailMatch || phoneMatch) {
-      await captureLead(message, emailMatch?.[0], phoneMatch?.[0])
+      const name    = extractName(allUserMessages)
+      const summary = buildSummary(allUserMessages)
+      await captureLead({
+        email:   emailMatch?.[0],
+        phone:   phoneMatch?.[0],
+        name,
+        summary,
+        locale,
+      })
     }
 
     return NextResponse.json({ reply })
