@@ -16,40 +16,4 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          python3 - <<'EOF'
-          import os, json, urllib.request, glob, datetime
-
-          token   = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-          chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
-          if not token or not chat_id:
-              print("No Telegram credentials, skipping.")
-              exit(0)
-
-          posts  = sorted(glob.glob("content/blog/*.md"), reverse=True)
-          count  = len(posts)
-          recent = "\n".join(f"• {os.path.basename(p)[:-3]}" for p in posts[:5]) or "No posts yet"
-          now    = datetime.datetime.utcnow()
-          week   = now.strftime("%V")
-          year   = now.strftime("%Y")
-
-          text = f"""📊 Rapport SEO Hebdomadaire — Semaine {week}/{year}
-
-🌐 https://lightsofter.vercel.app
-📝 Total articles : {count}
-
-📅 5 derniers articles :
-{recent}
-
-✅ Génération automatique active (8h UTC)
-✅ Déploiement Vercel actif"""
-
-          payload = json.dumps({"chat_id": chat_id, "text": text}).encode()
-          req = urllib.request.Request(
-              f"https://api.telegram.org/bot{token}/sendMessage",
-              data=payload,
-              headers={"Content-Type": "application/json"},
-          )
-          with urllib.request.urlopen(req) as r:
-              print(r.read().decode())
-          EOF
+        run: python3 scripts/weekly-report.py
