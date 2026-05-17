@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { X, MapPin, Clock, Calendar, ArrowRight } from 'lucide-react'
+import { X, MapPin, Clock, Calendar, ArrowRight, ExternalLink } from 'lucide-react'
 import type { Project } from '@/lib/projects'
 import { useT } from './LangProvider'
 
