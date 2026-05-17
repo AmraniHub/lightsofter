@@ -33,6 +33,7 @@ export const translations = {
     stats: {
       clients: 'Clients livrés',
       delay: 'Délai moyen',
+      delayValue: '3j',
       satisfaction: 'Satisfaction',
       countries: 'Pays (FR & BE)',
     },
@@ -260,6 +261,7 @@ export const translations = {
     stats: {
       clients: 'Clients delivered',
       delay: 'Average lead time',
+      delayValue: '3D',
       satisfaction: 'Satisfaction',
       countries: 'Countries (FR & BE)',
     },

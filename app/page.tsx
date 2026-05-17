@@ -21,7 +21,7 @@ export default function Home() {
 
   const stats = [
     { value: '50+', label: t.stats.clients },
-    { value: '3j', label: t.stats.delay },
+    { value: t.stats.delayValue, label: t.stats.delay },
     { value: '98%', label: t.stats.satisfaction },
     { value: '2', label: t.stats.countries },
   ]
