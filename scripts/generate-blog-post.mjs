@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const BLOG_DIR = path.join(__dirname, '..', 'content', 'blog')
+const IMG_DIR = path.join(__dirname, '..', 'public', 'blog-images')
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
@@ -274,6 +275,47 @@ Ton : expert, helpful, pas trop promotionnel`
   return data.content[0].text
 }
 
+// ── Generate image via Pollinations (free, no key needed) ────────────────────
+const CATEGORY_HINTS = {
+  Guide: 'professional business guide, laptop, notebook, France SMB consulting',
+  SEO: 'SEO analytics dashboard, search engine optimization, data charts, digital marketing',
+  'E-commerce': 'e-commerce online store, shopping cart, digital commerce, product catalog',
+  Android: 'Android mobile app development, smartphone screen, code interface, modern UI',
+  Web: 'web application development, browser dashboard, SaaS interface, modern design',
+  Tendances: 'digital transformation innovation, futuristic technology, business evolution',
+}
+
+async function generateImage(cluster, title, slug) {
+  try {
+    const hint = CATEGORY_HINTS[cluster.category] || 'web agency professional digital'
+    const prompt = encodeURIComponent(
+      `${hint}, purple violet accent color, clean modern minimalist illustration, high quality, no text, no watermark`
+    )
+    const seed = Math.floor(Math.random() * 9999)
+    const url = `https://image.pollinations.ai/prompt/${prompt}?width=1200&height=630&seed=${seed}&model=flux&nologo=true`
+
+    console.log('🖼️  Generating image via Pollinations...')
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 60000)
+
+    const res = await fetch(url, { signal: controller.signal })
+    clearTimeout(timeout)
+
+    if (!res.ok) throw new Error(`Pollinations error: ${res.status}`)
+
+    const buffer = await res.arrayBuffer()
+    if (!fs.existsSync(IMG_DIR)) fs.mkdirSync(IMG_DIR, { recursive: true })
+
+    const imgPath = path.join(IMG_DIR, `${slug}.jpg`)
+    fs.writeFileSync(imgPath, Buffer.from(buffer))
+    console.log(`✅ Image saved: ${imgPath}`)
+    return `/blog-images/${slug}.jpg`
+  } catch (err) {
+    console.warn(`⚠️  Image generation skipped: ${err.message}`)
+    return null
+  }
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 async function main() {
   console.log('🚀 Starting blog post generation...')
@@ -289,20 +331,24 @@ async function main() {
   const title = titleMatch ? titleMatch[1] : cluster.keyword
   const slug = `${slugify(title)}-${new Date().toISOString().split('T')[0]}`
 
-  // Save file
-  if (!fs.existsSync(BLOG_DIR)) fs.mkdirSync(BLOG_DIR, { recursive: true })
-  const filePath = path.join(BLOG_DIR, `${slug}.md`)
-  fs.writeFileSync(filePath, articleContent, 'utf-8')
-  console.log(`✅ Article saved: ${filePath}`)
-
-  // Generate Reddit + Quora
+  // Generate image in parallel with Reddit/Quora
   const descMatch = articleContent.match(/description:\s*"([^"]+)"/)
   const description = descMatch ? descMatch[1] : ''
 
-  const [redditPost, quoraAnswer] = await Promise.all([
+  const [imagePath, redditPost, quoraAnswer] = await Promise.all([
+    generateImage(cluster, title, slug),
     generateRedditPost(cluster, title, description),
     generateQuoraAnswer(cluster, title, description),
   ])
+
+  // Inject image into frontmatter and save file
+  if (!fs.existsSync(BLOG_DIR)) fs.mkdirSync(BLOG_DIR, { recursive: true })
+  const filePath = path.join(BLOG_DIR, `${slug}.md`)
+  const finalContent = imagePath
+    ? articleContent.replace(/^(---\n[\s\S]*?)(---)(\n)/, `$1image: "${imagePath}"\n$2$3`)
+    : articleContent
+  fs.writeFileSync(filePath, finalContent, 'utf-8')
+  console.log(`✅ Article saved: ${filePath}`)
 
   // Notify Telegram
   await notifyTelegram(title, slug, redditPost, quoraAnswer)

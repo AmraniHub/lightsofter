@@ -1,8 +1,9 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { getAllPosts } from '@/lib/blog'
 import Footer from '@/components/Footer'
 import type { Metadata } from 'next'
-import { ArrowRight, Clock, Tag } from 'lucide-react'
+import { ArrowRight, Clock } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Blog — Conseils Web & Digital pour PME | Lightsofter',
@@ -17,6 +18,15 @@ const categoryColors: Record<string, string> = {
   Android: 'bg-orange-100 text-orange-700',
   Tendances: 'bg-pink-100 text-pink-700',
   Web: 'bg-gray-100 text-gray-600',
+}
+
+const categoryGradients: Record<string, string> = {
+  Guide: 'from-purple-600 to-violet-500',
+  SEO: 'from-blue-600 to-cyan-500',
+  'E-commerce': 'from-green-600 to-emerald-500',
+  Android: 'from-orange-500 to-amber-400',
+  Tendances: 'from-pink-600 to-rose-500',
+  Web: 'from-gray-600 to-slate-500',
 }
 
 export default function BlogPage() {
@@ -52,8 +62,24 @@ export default function BlogPage() {
                   href={`/blog/${post.slug}`}
                   className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300 overflow-hidden flex flex-col"
                 >
-                  {/* Color band */}
-                  <div className="h-2 bg-gradient-to-r from-purple-600 to-violet-500" />
+                  {/* Thumbnail */}
+                  <div className="relative h-48 overflow-hidden bg-gray-100 flex-shrink-0">
+                    {post.image ? (
+                      <Image
+                        src={post.image}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <div className={`w-full h-full bg-gradient-to-br ${categoryGradients[post.category] ?? 'from-purple-600 to-violet-500'} flex items-center justify-center`}>
+                        <span className="text-white/30 text-5xl font-black">{post.category[0]}</span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                  </div>
+
                   <div className="p-6 flex flex-col flex-1">
                     <div className="flex items-center gap-2 mb-3">
                       <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${categoryColors[post.category] ?? 'bg-gray-100 text-gray-600'}`}>
@@ -66,7 +92,7 @@ export default function BlogPage() {
                     <h2 className="font-bold text-gray-900 text-base leading-snug mb-3 flex-1 group-hover:text-purple-700 transition-colors">
                       {post.title}
                     </h2>
-                    <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">{post.description}</p>
+                    <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-2">{post.description}</p>
                     <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                       <span className="text-xs text-gray-400">
                         {new Date(post.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}

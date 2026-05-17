@@ -13,6 +13,7 @@ export interface BlogPost {
   readTime: number
   content: string
   category: string
+  image?: string
 }
 
 export function getAllPosts(): Omit<BlogPost, 'content'>[] {
@@ -34,6 +35,7 @@ export function getAllPosts(): Omit<BlogPost, 'content'>[] {
         date: data.date ?? '',
         keywords: data.keywords ?? '',
         category: data.category ?? 'Web',
+        image: data.image ?? undefined,
         readTime,
       }
     })
@@ -55,6 +57,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
     date: data.date ?? '',
     keywords: data.keywords ?? '',
     category: data.category ?? 'Web',
+    image: data.image ?? undefined,
     readTime,
     content,
   }

@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getAllPosts, getPostBySlug } from '@/lib/blog'
 import Footer from '@/components/Footer'
 import type { Metadata } from 'next'
 import { marked } from 'marked'
-import { ArrowLeft, Clock, Calendar, Tag, ArrowRight } from 'lucide-react'
+import { ArrowLeft, Clock, Calendar, ArrowRight } from 'lucide-react'
 
 interface Props { params: { slug: string } }
 
@@ -26,6 +27,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'article',
       publishedTime: post.date,
       authors: ['Lightsofter'],
+      images: post.image
+        ? [{ url: `https://lightsofter.vercel.app${post.image}`, width: 1200, height: 630, alt: post.title }]
+        : [{ url: 'https://lightsofter.vercel.app/logo.png' }],
     },
   }
 }
@@ -84,6 +88,21 @@ export default function BlogPostPage({ params }: Props) {
             </div>
           </div>
         </div>
+
+        {/* Hero image */}
+        {post.image && (
+          <div className="relative w-full h-72 md:h-96 overflow-hidden">
+            <Image
+              src={post.image}
+              alt={post.title}
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent" />
+          </div>
+        )}
 
         {/* Content */}
         <div className="max-w-3xl mx-auto px-6 py-12">
