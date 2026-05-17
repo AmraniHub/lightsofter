@@ -4,14 +4,15 @@ import { useState } from 'react'
 import { ArrowRight, ExternalLink } from 'lucide-react'
 import { projects, type Project } from '@/lib/projects'
 import ProjectModal from './ProjectModal'
-
-const filters = ['Tous', 'Site Web', 'E-commerce', 'App Android', 'App Web']
+import { useT } from './LangProvider'
 
 export default function PortfolioSection() {
-  const [active, setActive] = useState('Tous')
+  const { t } = useT()
+  const filters = [t.portfolio.filter_all, 'Site Web', 'E-commerce', 'App Android', 'App Web']
+  const [active, setActive] = useState(filters[0])
   const [selected, setSelected] = useState<Project | null>(null)
 
-  const filtered = active === 'Tous' ? projects : projects.filter(p => p.type === active)
+  const filtered = active === filters[0] ? projects : projects.filter(p => p.type === active)
 
   return (
     <>
@@ -21,14 +22,12 @@ export default function PortfolioSection() {
           {/* Header */}
           <div className="text-center max-w-xl mx-auto mb-12">
             <span className="inline-block bg-purple-100 text-purple-700 text-sm font-semibold px-4 py-1.5 rounded-full mb-4">
-              Portfolio
+              {t.portfolio.badge}
             </span>
             <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-3">
-              Ce qu&apos;on a construit
+              {t.portfolio.title}
             </h2>
-            <p className="text-gray-500">
-              Cliquez sur un projet pour voir les détails, résultats et technologies utilisées.
-            </p>
+            <p className="text-gray-500">{t.portfolio.sub}</p>
           </div>
 
           {/* Filters */}
@@ -73,7 +72,7 @@ export default function PortfolioSection() {
                   <div className="absolute inset-0 bg-purple-900/0 group-hover:bg-purple-900/30 transition-all duration-300 flex items-center justify-center">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white rounded-2xl px-5 py-2.5 flex items-center gap-2 text-purple-700 font-bold text-sm shadow-xl">
                       <ExternalLink className="w-4 h-4" />
-                      Voir le projet
+                      {t.portfolio.filter_all === 'All' ? 'View project' : 'Voir le projet'}
                     </div>
                   </div>
                 </div>
@@ -101,7 +100,7 @@ export default function PortfolioSection() {
               href="#devis"
               className="inline-flex items-center gap-2 bg-purple-700 hover:bg-purple-800 text-white font-bold px-8 py-4 rounded-2xl transition-all shadow-lg hover:shadow-purple-500/30 hover:-translate-y-0.5"
             >
-              Démarrer mon projet <ArrowRight className="w-5 h-5" />
+              {t.portfolio.cta} <ArrowRight className="w-5 h-5" />
             </a>
           </div>
         </div>

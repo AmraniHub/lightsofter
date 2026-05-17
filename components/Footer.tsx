@@ -1,22 +1,25 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { Mail, MapPin } from 'lucide-react'
-
-const navLinks = [
-  { href: '/#services', label: 'Services' },
-  { href: '/#portfolio', label: 'Portfolio' },
-  { href: '/#pricing', label: 'Tarifs' },
-  { href: '/about', label: 'À propos' },
-  { href: '/contact', label: 'Contact' },
-]
-
-const legalLinks = [
-  { href: '/mentions-legales', label: 'Mentions légales' },
-  { href: '/politique-confidentialite', label: 'Confidentialité' },
-  { href: '/cgv', label: 'CGV' },
-]
+import { useT } from './LangProvider'
 
 export default function Footer() {
+  const { t } = useT()
+
+  const navLinks = [
+    { href: '/#services', label: t.nav.services },
+    { href: '/#realisations', label: t.nav.portfolio },
+    { href: '/#pricing', label: t.nav.pricing },
+  ]
+
+  const legalLinks = [
+    { href: '/mentions-legales', label: t.footer.legal },
+    { href: '/politique-confidentialite', label: t.footer.privacy },
+    { href: '/cgv', label: t.footer.terms },
+  ]
+
   return (
     <footer className="bg-gray-950 text-gray-400">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-16">
@@ -29,10 +32,7 @@ export default function Footer() {
                 light<span className="text-purple-400">softer</span>
               </span>
             </Link>
-            <p className="text-sm leading-relaxed max-w-sm">
-              Création de sites web et applications mobiles pour les PME en France et Belgique.
-              Livraison rapide, qualité professionnelle.
-            </p>
+            <p className="text-sm leading-relaxed max-w-sm">{t.footer.tagline}</p>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm">
                 <Mail className="w-4 h-4 text-purple-400" />
@@ -42,14 +42,14 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="w-4 h-4 text-purple-400" />
-                <span>France · Belgique · À distance</span>
+                <span>{t.footer.location}</span>
               </div>
             </div>
           </div>
 
           {/* Nav */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Navigation</h4>
+            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">{t.footer.nav_title}</h4>
             <ul className="space-y-2">
               {navLinks.map((l) => (
                 <li key={l.href}>
@@ -63,13 +63,13 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Services</h4>
+            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">{t.footer.services_title}</h4>
             <ul className="space-y-2 text-sm">
-              <li>Site web vitrine</li>
-              <li>E-commerce</li>
-              <li>Application Android</li>
-              <li>Application web</li>
-              <li>Refonte de site</li>
+              <li>{t.footer.s1}</li>
+              <li>{t.footer.s2}</li>
+              <li>{t.footer.s3}</li>
+              <li>{t.footer.s4}</li>
+              <li>{t.footer.s5}</li>
             </ul>
           </div>
         </div>
@@ -77,7 +77,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs">
-            © {new Date().getFullYear()} Lightsofter. Tous droits réservés.
+            © {new Date().getFullYear()} Lightsofter. {t.footer.rights}
           </p>
           <div className="flex gap-6">
             {legalLinks.map((l) => (

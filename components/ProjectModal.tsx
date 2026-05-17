@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { X, MapPin, Clock, Calendar, ArrowRight } from 'lucide-react'
 import type { Project } from '@/lib/projects'
+import { useT } from './LangProvider'
 
 interface Props {
   project: Project | null
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function ProjectModal({ project, onClose }: Props) {
+  const { t } = useT()
   useEffect(() => {
     if (!project) return
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
@@ -99,7 +101,7 @@ export default function ProjectModal({ project, onClose }: Props) {
           <div>
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 flex items-center gap-2">
               <span className="w-1.5 h-4 bg-red-400 rounded-full" />
-              Le problème
+              {t.portfolio.modal_problem}
             </h3>
             <p className="text-gray-500 text-sm leading-relaxed">{project.challenge}</p>
           </div>
@@ -108,7 +110,7 @@ export default function ProjectModal({ project, onClose }: Props) {
           <div>
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 flex items-center gap-2">
               <span className="w-1.5 h-4 bg-purple-500 rounded-full" />
-              Notre solution
+              {t.portfolio.modal_solution}
             </h3>
             <p className="text-gray-500 text-sm leading-relaxed">{project.solution}</p>
           </div>
@@ -117,7 +119,7 @@ export default function ProjectModal({ project, onClose }: Props) {
           <div>
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-2">
               <span className="w-1.5 h-4 bg-blue-400 rounded-full" />
-              Technologies utilisées
+              {t.portfolio.modal_stack}
             </h3>
             <div className="flex flex-wrap gap-2">
               {project.stack.map(t => (
@@ -136,7 +138,7 @@ export default function ProjectModal({ project, onClose }: Props) {
             onClick={onClose}
             className="flex items-center justify-center gap-2 w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-purple-500/25 hover:-translate-y-0.5"
           >
-            Je veux un projet similaire <ArrowRight className="w-5 h-5" />
+            {t.portfolio.modal_cta} <ArrowRight className="w-5 h-5" />
           </a>
         </div>
       </div>

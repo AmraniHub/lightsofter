@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import WhatsAppButton from '@/components/WhatsAppButton'
+import { LangProvider } from '@/components/LangProvider'
 
 export const metadata: Metadata = {
   title: 'Lightsofter — Sites Web & Applications Mobiles',
@@ -27,9 +28,11 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <Navbar />
-        <main>{children}</main>
-        <WhatsAppButton />
+        <LangProvider>
+          <Navbar />
+          <main>{children}</main>
+          <WhatsAppButton />
+        </LangProvider>
       </body>
     </html>
   )
