@@ -132,7 +132,17 @@ export default function ProjectModal({ project, onClose }: Props) {
         </div>
 
         {/* Sticky CTA */}
-        <div className="flex-shrink-0 border-t border-gray-100 p-5 bg-white">
+        <div className="flex-shrink-0 border-t border-gray-100 p-5 bg-white flex flex-col gap-3">
+          {project.url && (
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-3.5 rounded-2xl transition-all"
+            >
+              <ExternalLink className="w-4 h-4" /> Voir le site en ligne
+            </a>
+          )}
           <a
             href="#devis"
             onClick={onClose}
