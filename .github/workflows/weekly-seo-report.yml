@@ -12,48 +12,44 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Count blog posts
-        id: count
-        run: |
-          COUNT=$(find content/blog -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
-          echo "count=$COUNT" >> $GITHUB_OUTPUT
-
-      - name: List recent posts
-        id: recent
-        run: |
-          RECENT=$(find content/blog -name "*.md" | sort -r | head -5 | xargs -I{} basename {} .md | tr '\n' '|')
-          echo "recent=$RECENT" >> $GITHUB_OUTPUT
-
       - name: Send Telegram weekly report
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          WEEK=$(date +%V)
-          YEAR=$(date +%Y)
-          COUNT="${{ steps.count.outputs.count }}"
-          RECENT="${{ steps.recent.outputs.recent }}"
+          python3 - <<'EOF'
+          import os, json, urllib.request, glob, datetime
 
-          IFS='|' read -ra POSTS <<< "$RECENT"
-          POSTS_LIST=""
-          for p in "${POSTS[@]}"; do
-            [ -n "$p" ] && POSTS_LIST="${POSTS_LIST}• ${p}\n"
-          done
+          token   = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+          chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
+          if not token or not chat_id:
+              print("No Telegram credentials, skipping.")
+              exit(0)
 
-          TEXT="📊 <b>Rapport SEO Hebdomadaire — Semaine ${WEEK}/${YEAR}</b>
+          posts  = sorted(glob.glob("content/blog/*.md"), reverse=True)
+          count  = len(posts)
+          recent = "\n".join(f"• {os.path.basename(p)[:-3]}" for p in posts[:5]) or "No posts yet"
+          now    = datetime.datetime.utcnow()
+          week   = now.strftime("%V")
+          year   = now.strftime("%Y")
 
-🌐 Site : https://lightsofter.vercel.app
-🗺️ Sitemap : https://lightsofter.vercel.app/sitemap.xml
+          text = f"""📊 Rapport SEO Hebdomadaire — Semaine {week}/{year}
 
-📝 Total articles publiés : <b>${COUNT}</b>
+🌐 https://lightsofter.vercel.app
+📝 Total articles : {count}
 
-📅 <b>5 derniers articles :</b>
-${POSTS_LIST}
-✅ Génération automatique : active (quotidienne 8h UTC)
-✅ Déploiement : Vercel (auto sur push)
-✅ JSON-LD schemas : actifs
-✅ robots.txt + sitemap.xml : actifs"
+📅 5 derniers articles :
+{recent}
 
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-            -H "Content-Type: application/json" \
-            -d "{\"chat_id\": \"${TELEGRAM_CHAT_ID}\", \"text\": \"${TEXT}\", \"parse_mode\": \"HTML\"}"
+✅ Génération automatique active (8h UTC)
+✅ Déploiement Vercel actif"""
+
+          payload = json.dumps({"chat_id": chat_id, "text": text}).encode()
+          req = urllib.request.Request(
+              f"https://api.telegram.org/bot{token}/sendMessage",
+              data=payload,
+              headers={"Content-Type": "application/json"},
+          )
+          with urllib.request.urlopen(req) as r:
+              print(r.read().decode())
+          EOF
