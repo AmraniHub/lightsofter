@@ -1,0 +1,65 @@
+{
+  "business": {
+    "name": "Votre Entreprise",
+    "sector": "Artisan",
+    "slug": "votre-entreprise",
+    "phone": "+33 6 00 00 00 00",
+    "email": "contact@exemple.fr",
+    "country": "FR"
+  },
+  "meta": {
+    "title": "Votre Entreprise — Artisan de confiance",
+    "description": "Description de votre activité, vos services et ce qui vous distingue.",
+    "keywords": "artisan, service, france"
+  },
+  "design": {
+    "primaryColor": "#7c3aed",
+    "accentColor": "#a78bfa",
+    "style": "modern"
+  },
+  "hero": {
+    "headline": "Votre titre accrocheur principal",
+    "subheadline": "Une phrase qui décrit votre valeur ajoutée et rassure le visiteur.",
+    "ctaText": "Demander un devis",
+    "ctaSecondaryText": "Voir nos réalisations"
+  },
+  "services": [
+    { "icon": "🔨", "title": "Service 1", "description": "Description du service 1.", "price": "Dès 99€" },
+    { "icon": "⚡", "title": "Service 2", "description": "Description du service 2.", "price": "Sur devis" },
+    { "icon": "✅", "title": "Service 3", "description": "Description du service 3.", "price": "Forfait" }
+  ],
+  "about": {
+    "title": "Qui sommes-nous ?",
+    "paragraph1": "Premier paragraphe de présentation de votre entreprise.",
+    "paragraph2": "Deuxième paragraphe avec vos valeurs et votre engagement.",
+    "stats": [
+      { "value": "10+", "label": "Ans d'expérience" },
+      { "value": "200+", "label": "Clients satisfaits" },
+      { "value": "100%", "label": "Satisfaction garantie" }
+    ]
+  },
+  "testimonials": [
+    { "name": "Marie D.", "role": "Cliente", "text": "Excellent travail, très professionnel.", "rating": 5 },
+    { "name": "Pierre L.", "role": "Client", "text": "Je recommande vivement, résultat impeccable.", "rating": 5 },
+    { "name": "Sophie M.", "role": "Cliente", "text": "Rapide, efficace et à l'écoute.", "rating": 5 }
+  ],
+  "faq": [
+    { "q": "Quels sont vos délais ?", "a": "Nous intervenons généralement sous 48-72h." },
+    { "q": "Proposez-vous des devis gratuits ?", "a": "Oui, le devis est toujours gratuit et sans engagement." },
+    { "q": "Quelle est votre zone d'intervention ?", "a": "Nous intervenons dans toute la région." },
+    { "q": "Comment vous contacter ?", "a": "Par téléphone, email ou via le formulaire ci-dessous." }
+  ],
+  "cta": {
+    "headline": "Prêt à démarrer votre projet ?",
+    "subtext": "Contactez-nous aujourd'hui pour un devis gratuit sous 24h.",
+    "buttonText": "Obtenir mon devis gratuit"
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Réponse garantie sous 24h.",
+    "phone": "+33 6 00 00 00 00",
+    "email": "contact@exemple.fr",
+    "address": "Paris, France",
+    "hours": "Lun–Ven 9h–18h"
+  }
+}

@@ -3,6 +3,11 @@ import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2025-04-30.basil' })
 
+const SUBSCRIPTION_PRICES: Record<string, string> = {
+  basic: process.env.STRIPE_PRICE_MAINT_BASIC ?? '',
+  pro: process.env.STRIPE_PRICE_MAINT_PRO ?? '',
+}
+
 async function sendTelegram(text: string) {
   const token = process.env.TELEGRAM_BOT_TOKEN
   const chatId = process.env.TELEGRAM_CHAT_ID
@@ -12,6 +17,21 @@ async function sendTelegram(text: string) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
   })
+}
+
+async function createSubscriptionLink(priceId: string, email: string, metadata: Record<string, string>) {
+  if (!priceId) return null
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    mode: 'subscription',
+    locale: 'fr',
+    customer_email: email || undefined,
+    line_items: [{ price: priceId, quantity: 1 }],
+    metadata,
+    success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/order/success?subscribed=1`,
+    cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+  })
+  return session.url
 }
 
 export async function POST(req: NextRequest) {
@@ -30,6 +50,21 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as Stripe.CheckoutSession
     const m = session.metadata ?? {}
     const amount = ((session.amount_total ?? 0) / 100).toFixed(0)
+
+    // Build subscription link if maintenance was chosen
+    let subscriptionLine = ''
+    if (m.maintenance && m.maintenance !== 'none') {
+      const priceId = SUBSCRIPTION_PRICES[m.maintenance]
+      const link = await createSubscriptionLink(priceId, m.email ?? '', {
+        businessName: m.businessName,
+        clientEmail: m.email ?? '',
+        maintenance: m.maintenance,
+      })
+      const label = m.maintenance === 'pro' ? '49€/mois' : '29€/mois'
+      subscriptionLine = link
+        ? `\n\n📋 <b>Lien maintenance ${label} :</b>\n${link}\n(À envoyer au client après livraison)`
+        : `\n\n⚠️ Maintenance choisie (${label}) — créer lien Stripe manuellement`
+    }
 
     const msg = [
       `💰 <b>NOUVELLE COMMANDE — ${amount}€</b>`,
@@ -51,6 +86,7 @@ export async function POST(req: NextRequest) {
       m.notes ? `📝 Notes : ${m.notes}` : '',
       ``,
       `✅ Paiement confirmé · Session: ${session.id}`,
+      subscriptionLine,
     ].filter(Boolean).join('\n')
 
     await sendTelegram(msg)

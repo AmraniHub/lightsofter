@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #7c3aed;
+  --color-accent: #a78bfa;
+}
+
+html { scroll-behavior: smooth; }
+
+.btn-primary {
+  @apply inline-flex items-center justify-center bg-[var(--color-primary)] text-white font-semibold rounded-xl px-7 py-3.5 hover:opacity-90 transition-all duration-200 shadow-lg;
+}
+
+.btn-outline {
+  @apply inline-flex items-center justify-center border-2 border-[var(--color-primary)] text-[var(--color-primary)] font-semibold rounded-xl px-7 py-3.5 hover:bg-[var(--color-primary)] hover:text-white transition-all duration-200;
+}

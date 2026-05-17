@@ -1,0 +1,71 @@
+name: Generate Client Site
+
+on:
+  workflow_dispatch:
+    inputs:
+      stripe_session_id:
+        description: 'Stripe Checkout Session ID (cs_xxx)'
+        required: false
+        type: string
+      order_json:
+        description: 'Order JSON (paste metadata manually if no session)'
+        required: false
+        type: string
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate site content
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+        run: |
+          if [ -n "${{ inputs.stripe_session_id }}" ]; then
+            node scripts/generate-site.mjs --session "${{ inputs.stripe_session_id }}"
+          else
+            echo '${{ inputs.order_json }}' > /tmp/order.json
+            node scripts/generate-site.mjs --order /tmp/order.json
+          fi
+
+      - name: Get generated site slug
+        id: slug
+        run: |
+          SLUG=$(ls generated/ | head -1)
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+          echo "Generated site: $SLUG"
+
+      - name: Create GitHub repo and push
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          SLUG="${{ steps.slug.outputs.slug }}"
+          cd generated/$SLUG
+          git init
+          git add .
+          git commit -m "feat: initial site generation for $SLUG"
+          gh repo create "AmraniHub/$SLUG" --private --push --source=. || true
+
+      - name: Notify Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          SLUG="${{ steps.slug.outputs.slug }}"
+          python3 -c "
+          import os, urllib.request, json
+          token = os.environ['TELEGRAM_BOT_TOKEN']
+          chat_id = os.environ['TELEGRAM_CHAT_ID']
+          text = f'🏗️ <b>Site généré :</b> $SLUG\n\n✅ Repo créé : https://github.com/AmraniHub/$SLUG\n\n📋 Prochaine étape : Importer dans Vercel → https://vercel.com/new'
+          payload = json.dumps({'chat_id': chat_id, 'text': text, 'parse_mode': 'HTML'}).encode()
+          req = urllib.request.Request(f'https://api.telegram.org/bot{token}/sendMessage', data=payload, headers={'Content-Type': 'application/json'})
+          urllib.request.urlopen(req)
+          print('Telegram notification sent')
+          "
