@@ -16,6 +16,7 @@ export interface Project {
   duration: string
   year: string
   url?: string
+  image?: string
   real?: boolean
 }
 
@@ -44,6 +45,7 @@ export const projects: Project[] = [
     duration: '3 jours',
     year: '2024',
     url: 'https://www.airidebox.com',
+    image: 'https://image.thum.io/get/width/800/crop/450/https://www.airidebox.com/',
     real: true,
   },
   {
@@ -70,6 +72,7 @@ export const projects: Project[] = [
     duration: '3 jours',
     year: '2024',
     url: 'https://trendimora.com',
+    image: 'https://image.thum.io/get/width/800/crop/450/https://trendimora.com/',
     real: true,
   },
   {
@@ -96,6 +99,7 @@ export const projects: Project[] = [
     duration: '3 jours',
     year: '2024',
     url: 'https://concepteurbois.ma',
+    image: 'https://image.thum.io/get/width/800/crop/450/https://concepteurbois.ma/',
     real: true,
   },
   {
@@ -121,6 +125,7 @@ export const projects: Project[] = [
     ],
     duration: '2-3 jours',
     year: '2025',
+    image: 'https://image.pollinations.ai/prompt/professional%20law%20firm%20website%20screenshot%20mockup%2C%20blue%20indigo%20gradient%2C%20clean%20modern%20UI%2C%20notary%20office%2C%20French%20website%2C%20desktop%20browser%20view%2C%20no%20text?width=800&height=450&seed=101&model=flux&nologo=true',
   },
   {
     slug: 'garage-peugeot',
@@ -145,6 +150,7 @@ export const projects: Project[] = [
     ],
     duration: '5 jours',
     year: '2025',
+    image: 'https://image.pollinations.ai/prompt/modern%20car%20garage%20booking%20app%20website%20mockup%2C%20dark%20gray%20automotive%20design%2C%20appointment%20scheduling%20UI%2C%20clean%20professional%2C%20desktop%20browser%20view%2C%20no%20text?width=800&height=450&seed=202&model=flux&nologo=true',
   },
   {
     slug: 'immo-belgique',
@@ -169,5 +175,6 @@ export const projects: Project[] = [
     ],
     duration: '7 jours',
     year: '2025',
+    image: 'https://image.pollinations.ai/prompt/real%20estate%20agency%20website%20mockup%2C%20purple%20violet%20gradient%2C%20property%20listings%20grid%2C%20modern%20Belgian%20real%20estate%2C%20clean%20UI%2C%20desktop%20browser%20view%2C%20no%20text?width=800&height=450&seed=303&model=flux&nologo=true',
   },
 ]

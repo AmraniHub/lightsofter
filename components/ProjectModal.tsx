@@ -39,7 +39,10 @@ export default function ProjectModal({ project, onClose }: Props) {
 
         {/* Hero banner */}
         <div className={`relative bg-gradient-to-br ${project.color} h-48 flex-shrink-0 flex items-center justify-center overflow-hidden`}>
-          <div className="absolute inset-0 bg-black/15" />
+          {project.image && (
+            <img src={project.image} alt={project.name} className="absolute inset-0 w-full h-full object-cover object-top" />
+          )}
+          <div className="absolute inset-0 bg-black/30" />
           <span className="text-7xl relative z-10">{project.emoji}</span>
 
           {/* Browser chrome overlay */}

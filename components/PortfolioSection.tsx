@@ -57,19 +57,27 @@ export default function PortfolioSection() {
               >
                 {/* Visual */}
                 <div className={`h-48 bg-gradient-to-br ${p.color} flex items-center justify-center relative overflow-hidden`}>
-                  <span className="text-5xl relative z-10 group-hover:scale-110 transition-transform duration-300">
-                    {p.emoji}
-                  </span>
-                  <div className="absolute inset-0 bg-black/10" />
+                  {p.image ? (
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span className="text-5xl relative z-10 group-hover:scale-110 transition-transform duration-300">
+                      {p.emoji}
+                    </span>
+                  )}
 
-                  {/* Browser mock */}
-                  <div className="absolute top-3 left-3 right-3 bg-white/15 backdrop-blur-sm rounded-xl p-2 flex items-center gap-2">
-                    <div className="flex gap-1">{[0,1,2].map(i => <div key={i} className="w-2 h-2 rounded-full bg-white/50" />)}</div>
-                    <div className="flex-1 bg-white/25 rounded h-3" />
+                  {/* Browser chrome top bar */}
+                  <div className="absolute top-3 left-3 right-3 bg-white/15 backdrop-blur-sm rounded-xl p-2 flex items-center gap-2 z-10">
+                    <div className="flex gap-1">{[0,1,2].map(i => <div key={i} className="w-2 h-2 rounded-full bg-white/70" />)}</div>
+                    <div className="flex-1 bg-white/30 rounded h-3" />
                   </div>
 
                   {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-purple-900/0 group-hover:bg-purple-900/30 transition-all duration-300 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-purple-900/0 group-hover:bg-purple-900/50 transition-all duration-300 flex items-center justify-center z-20">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white rounded-2xl px-5 py-2.5 flex items-center gap-2 text-purple-700 font-bold text-sm shadow-xl">
                       <ExternalLink className="w-4 h-4" />
                       {t.portfolio.filter_all === 'All' ? 'View project' : 'Voir le projet'}
