@@ -199,13 +199,13 @@ export default function Home() {
       </section>
 
       {/* ══ PORTFOLIO ════════════════════════════════════════════════ */}
-      <PortfolioSection />
+      <div id="realisations"><PortfolioSection /></div>
 
       {/* ══ PRICING ══════════════════════════════════════════════════ */}
-      <Pricing />
+      <div id="tarifs"><Pricing /></div>
 
       {/* ══ TESTIMONIALS ═════════════════════════════════════════════ */}
-      <section className="py-24 bg-white">
+      <section id="temoignages" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
           <div className="text-center max-w-xl mx-auto mb-14">
             <span className="inline-block bg-purple-100 text-purple-700 text-sm font-semibold px-4 py-1.5 rounded-full mb-4">{t.testimonials.badge}</span>
