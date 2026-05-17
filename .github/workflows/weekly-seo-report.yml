@@ -1,0 +1,59 @@
+name: Weekly SEO Report
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Count blog posts
+        id: count
+        run: |
+          COUNT=$(find content/blog -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+          echo "count=$COUNT" >> $GITHUB_OUTPUT
+
+      - name: List recent posts
+        id: recent
+        run: |
+          RECENT=$(find content/blog -name "*.md" | sort -r | head -5 | xargs -I{} basename {} .md | tr '\n' '|')
+          echo "recent=$RECENT" >> $GITHUB_OUTPUT
+
+      - name: Send Telegram weekly report
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          WEEK=$(date +%V)
+          YEAR=$(date +%Y)
+          COUNT="${{ steps.count.outputs.count }}"
+          RECENT="${{ steps.recent.outputs.recent }}"
+
+          IFS='|' read -ra POSTS <<< "$RECENT"
+          POSTS_LIST=""
+          for p in "${POSTS[@]}"; do
+            [ -n "$p" ] && POSTS_LIST="${POSTS_LIST}• ${p}\n"
+          done
+
+          TEXT="📊 <b>Rapport SEO Hebdomadaire — Semaine ${WEEK}/${YEAR}</b>
+
+🌐 Site : https://lightsofter.vercel.app
+🗺️ Sitemap : https://lightsofter.vercel.app/sitemap.xml
+
+📝 Total articles publiés : <b>${COUNT}</b>
+
+📅 <b>5 derniers articles :</b>
+${POSTS_LIST}
+✅ Génération automatique : active (quotidienne 8h UTC)
+✅ Déploiement : Vercel (auto sur push)
+✅ JSON-LD schemas : actifs
+✅ robots.txt + sitemap.xml : actifs"
+
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d "{\"chat_id\": \"${TELEGRAM_CHAT_ID}\", \"text\": \"${TEXT}\", \"parse_mode\": \"HTML\"}"
