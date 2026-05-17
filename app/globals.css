@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --purple-main: #7e22ce;
+  --purple-light: #a855f7;
+  --purple-glow: rgba(168, 85, 247, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #ffffff;
+  color: #1a1a2e;
+  overflow-x: hidden;
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #7e22ce 0%, #a855f7 50%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-purple-glow {
+    background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.12) 0%, transparent 70%);
+  }
+
+  .card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(126, 34, 206, 0.15);
+  }
+
+  .btn-primary {
+    @apply bg-purple-700 hover:bg-purple-800 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-purple-500/30 hover:shadow-xl hover:-translate-y-0.5;
+  }
+
+  .btn-secondary {
+    @apply border-2 border-purple-700 text-purple-700 hover:bg-purple-700 hover:text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300;
+  }
+
+  .section-padding {
+    @apply py-20 px-6 md:px-12 lg:px-24;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f8f4ff;
+}
+::-webkit-scrollbar-thumb {
+  background: #a855f7;
+  border-radius: 3px;
+}
+
+/* WhatsApp button pulse */
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.whatsapp-pulse::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #25d366;
+  animation: pulse-ring 2s ease-out infinite;
+}

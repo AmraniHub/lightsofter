@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(gh --version)",
+      "PowerShell(npx vercel --version 2>&1)"
+    ]
+  }
+}
