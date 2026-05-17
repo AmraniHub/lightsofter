@@ -15,7 +15,7 @@ export default function Home() {
   const { t, locale } = useT()
 
   const serviceIcons = [Globe, Smartphone, LayoutDashboard]
-  const serviceDelays = ['3–5j', '10–15j', '7–14j']
+  const serviceDelays = [t.hero.delay1, t.hero.delay2, t.hero.delay3]
   const serviceFroms = ['490€', '990€', '790€']
   const serviceLabels = [t.hero.service1, t.hero.service2, t.hero.service3]
 
