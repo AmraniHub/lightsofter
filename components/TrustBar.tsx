@@ -1,6 +1,6 @@
 const stats = [
   { value: '50+', label: 'Clients satisfaits' },
-  { value: '5j', label: 'Délai moyen' },
+  { value: '3j', label: 'Délai moyen' },
   { value: '2', label: 'Pays (FR & BE)' },
   { value: '98%', label: 'Satisfaction client' },
 ]
