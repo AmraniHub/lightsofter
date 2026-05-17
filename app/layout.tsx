@@ -3,6 +3,7 @@ import Script from 'next/script'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import WhatsAppButton from '@/components/WhatsAppButton'
+import ScrollToTopButton from '@/components/ScrollToTopButton'
 import ChatWidget from '@/components/ChatWidget'
 import { LangProvider } from '@/components/LangProvider'
 
@@ -109,6 +110,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar />
           <main>{children}</main>
           <WhatsAppButton />
+          <ScrollToTopButton />
           <ChatWidget />
         </LangProvider>
       </body>
