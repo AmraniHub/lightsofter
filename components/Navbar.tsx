@@ -52,8 +52,11 @@ export default function Navbar() {
         {/* Right: lang + CTA */}
         <div className="hidden md:flex items-center gap-3">
           <LangSwitcher />
-          <Link href="/contact" className="btn-primary text-sm py-3 px-6">
+          <Link href="/contact" className={`text-sm font-medium transition-colors ${scrolled ? 'text-gray-600 hover:text-purple-700' : 'text-white/70 hover:text-white'}`}>
             {t.nav.cta}
+          </Link>
+          <Link href="/order" className="btn-primary text-sm py-3 px-6">
+            Commander →
           </Link>
         </div>
 
@@ -73,9 +76,14 @@ export default function Navbar() {
           ))}
           <div className="flex items-center justify-between mt-2">
             <LangSwitcher />
-            <Link href="/contact" onClick={() => setOpen(false)} className="btn-primary text-sm py-3 px-5">
-              {t.nav.cta}
-            </Link>
+            <div className="flex gap-2">
+              <Link href="/contact" onClick={() => setOpen(false)} className="text-sm font-medium text-gray-600 hover:text-purple-700 py-3 px-4 transition-colors">
+                {t.nav.cta}
+              </Link>
+              <Link href="/order" onClick={() => setOpen(false)} className="btn-primary text-sm py-3 px-5">
+                Commander →
+              </Link>
+            </div>
           </div>
         </div>
       )}
