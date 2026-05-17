@@ -18,21 +18,24 @@ async function appendToSheet(data: SubmitBody) {
 
   const date = new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })
 
+  const params = new URLSearchParams({
+    date,
+    name: data.name,
+    email: data.email,
+    phone: data.phone || '—',
+    type: data.type || '—',
+    budget: data.budget || '—',
+    deadline: data.deadline || '—',
+    goal: data.goal || '—',
+    message: data.message || '—',
+    locale: data.locale.toUpperCase(),
+  })
+
   await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      date,
-      name: data.name,
-      email: data.email,
-      phone: data.phone || '—',
-      type: data.type || '—',
-      budget: data.budget || '—',
-      deadline: data.deadline || '—',
-      goal: data.goal || '—',
-      message: data.message || '—',
-      locale: data.locale.toUpperCase(),
-    }),
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: params.toString(),
+    redirect: 'follow',
   })
 }
 
