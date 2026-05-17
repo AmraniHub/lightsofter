@@ -1,6 +1,7 @@
-import Link from 'next/link'
-import { ArrowRight, CheckCircle, Star, Zap, Globe, Smartphone, LayoutDashboard, Clock, Shield, Headphones } from 'lucide-react'
+import { ArrowRight, CheckCircle, Star, Zap, Globe, Smartphone, LayoutDashboard, Clock, Shield, Headphones, MessageCircle } from 'lucide-react'
 import SmartForm from '@/components/SmartForm'
+import PortfolioSection from '@/components/PortfolioSection'
+import Pricing from '@/components/Pricing'
 import Footer from '@/components/Footer'
 
 /* ─── Data ────────────────────────────────────────────────────────── */
@@ -16,15 +17,6 @@ const stats = [
   { value: '5j', label: 'Délai moyen' },
   { value: '98%', label: 'Satisfaction' },
   { value: '2', label: 'Pays (FR & BE)' },
-]
-
-const projects = [
-  { emoji: '🍽️', name: 'Restaurant Le Provençal', type: 'Site web', city: 'Paris', result: '+40% réservations', color: 'from-orange-400 to-red-500' },
-  { emoji: '💊', name: 'Pharmacie Dubois', type: 'App Android', city: 'Bruxelles', result: '100% numérisé', color: 'from-green-400 to-teal-500' },
-  { emoji: '👗', name: 'Boutique Élégance', type: 'E-commerce', city: 'Bordeaux', result: 'En ligne en 5j', color: 'from-pink-400 to-rose-500' },
-  { emoji: '🏠', name: 'IMMO+ Belgique', type: 'App web', city: 'Liège', result: '500 biens en ligne', color: 'from-purple-400 to-violet-600' },
-  { emoji: '⚖️', name: 'Cabinet Martin', type: 'Site web', city: 'Lyon', result: '+60% contacts', color: 'from-blue-400 to-indigo-500' },
-  { emoji: '🚗', name: 'Garage Peugeot+', type: 'App web', city: 'Lille', result: 'RDV automatisés', color: 'from-gray-500 to-gray-700' },
 ]
 
 const testimonials = [
@@ -227,45 +219,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ PORTFOLIO ═════════════════════════════════════════════════ */}
-      <section id="realisations" className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
-          <div className="text-center max-w-xl mx-auto mb-14">
-            <span className="inline-block bg-purple-100 text-purple-700 text-sm font-semibold px-4 py-1.5 rounded-full mb-4">Portfolio</span>
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-3">Ce qu&apos;on a construit</h2>
-            <p className="text-gray-500">Des projets réels pour des entreprises en France et Belgique.</p>
-          </div>
+      {/* ══ PORTFOLIO (with modal) ════════════════════════════════════ */}
+      <PortfolioSection />
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map(p => (
-              <div key={p.name} className="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300">
-                <div className={`h-44 bg-gradient-to-br ${p.color} flex items-center justify-center relative overflow-hidden`}>
-                  <span className="text-5xl relative z-10">{p.emoji}</span>
-                  <div className="absolute inset-0 bg-black/10" />
-                  <div className="absolute top-3 left-3 right-3 bg-white/15 backdrop-blur-sm rounded-xl p-2 flex items-center gap-2">
-                    <div className="flex gap-1">{[0,1,2].map(i => <div key={i} className="w-2 h-2 rounded-full bg-white/50" />)}</div>
-                    <div className="flex-1 bg-white/25 rounded h-3" />
-                  </div>
-                </div>
-                <div className="p-5">
-                  <span className="text-xs font-semibold text-purple-700 bg-purple-50 border border-purple-100 rounded-full px-3 py-1">{p.type}</span>
-                  <h3 className="font-bold text-gray-900 mt-3 mb-1 text-sm">{p.name}</h3>
-                  <p className="text-xs text-gray-400 mb-3">📍 {p.city}</p>
-                  <div className="bg-green-50 border border-green-100 rounded-xl px-3 py-2">
-                    <p className="text-xs font-semibold text-green-700">✅ {p.result}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <a href="#devis" className="inline-flex items-center gap-2 bg-purple-700 hover:bg-purple-800 text-white font-bold px-8 py-4 rounded-2xl transition-all shadow-lg hover:shadow-purple-500/30 hover:-translate-y-0.5">
-              Démarrer mon projet <ArrowRight className="w-5 h-5" />
-            </a>
-          </div>
-        </div>
-      </section>
+      {/* ══ PRICING (with Stripe) ════════════════════════════════════ */}
+      <Pricing />
 
       {/* ══ TESTIMONIALS ═════════════════════════════════════════════ */}
       <section className="py-24 bg-white">
