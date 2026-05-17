@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Globe, Smartphone, LayoutDashboard, ShoppingCart, RefreshCw, ArrowRight, ArrowLeft, CheckCircle, Euro, Clock, Target, User, MessageCircle } from 'lucide-react'
 import { useT } from './LangProvider'
 
@@ -40,7 +40,7 @@ function OptionCard({ option, selected, onClick }: { option: { value: string; la
 }
 
 export default function SmartForm() {
-  const { t } = useT()
+  const { t, locale } = useT()
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Answers>({})
   const [contact, setContact] = useState<ContactData>({ name: '', email: '', phone: '', message: '' })
@@ -97,7 +97,29 @@ export default function SmartForm() {
   function selectOption(value: string) { setAnswers(prev => ({ ...prev, [current.id]: value })) }
   function next() { if (!canProceed) return; if (isLastStep) handleSubmit(); else setStep(s => s + 1) }
   function back() { if (step > 0) setStep(s => s - 1) }
-  function handleSubmit() { setLoading(true); setTimeout(() => { setLoading(false); setSubmitted(true) }, 1200) }
+
+  const handleSubmit = useCallback(async () => {
+    setLoading(true)
+    try {
+      await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...contact,
+          type: answers.type ?? '',
+          budget: answers.budget ?? '',
+          deadline: answers.deadline ?? '',
+          goal: answers.goal ?? '',
+          locale,
+        }),
+      })
+    } catch {
+      // silently continue — show success regardless to not block the user
+    } finally {
+      setLoading(false)
+      setSubmitted(true)
+    }
+  }, [contact, answers, locale])
 
   if (submitted) {
     return (
