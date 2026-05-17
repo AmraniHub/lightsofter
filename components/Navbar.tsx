@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, Zap } from 'lucide-react'
+import Image from 'next/image'
+import { Menu, X } from 'lucide-react'
 
 const links = [
   { href: '/#services', label: 'Services' },
@@ -29,10 +30,15 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 h-18 flex items-center justify-between py-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-9 h-9 bg-purple-700 rounded-xl flex items-center justify-center shadow-lg group-hover:bg-purple-800 transition-colors">
-            <Zap className="w-5 h-5 text-white fill-white" />
-          </div>
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <Image
+            src="/logo.png"
+            alt="Lightsofter logo"
+            width={36}
+            height={36}
+            className="rounded-xl shadow-md group-hover:opacity-90 transition-opacity"
+            priority
+          />
           <span className="font-bold text-xl text-gray-900">
             light<span className="text-purple-700">softer</span>
           </span>

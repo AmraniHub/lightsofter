@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Zap, Mail, MapPin } from 'lucide-react'
+import Image from 'next/image'
+import { Mail, MapPin } from 'lucide-react'
 
 const navLinks = [
   { href: '/#services', label: 'Services' },
@@ -22,10 +23,8 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div className="md:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-2 w-fit">
-              <div className="w-9 h-9 bg-purple-700 rounded-xl flex items-center justify-center">
-                <Zap className="w-5 h-5 text-white fill-white" />
-              </div>
+            <Link href="/" className="flex items-center gap-2.5 w-fit">
+              <Image src="/logo.png" alt="Lightsofter" width={34} height={34} className="rounded-xl opacity-90" />
               <span className="font-bold text-xl text-white">
                 light<span className="text-purple-400">softer</span>
               </span>
