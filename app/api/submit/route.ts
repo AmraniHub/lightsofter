@@ -31,12 +31,7 @@ async function appendToSheet(data: SubmitBody) {
     locale: data.locale.toUpperCase(),
   })
 
-  await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: params.toString(),
-    redirect: 'follow',
-  })
+  await fetch(`${url}?${params.toString()}`, { method: 'GET' })
 }
 
 async function sendTelegram(data: SubmitBody) {
