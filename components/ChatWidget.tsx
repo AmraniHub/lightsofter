@@ -53,7 +53,13 @@ function ga(event: string, params?: Record<string, string>) {
 
 const WELCOME: Message = {
   role: 'assistant',
-  content: 'Bonjour 👋 Je suis l\'assistant Lightsofter. Comment puis-je vous aider ? Devis, tarifs, réalisations...',
+  content: `Bonjour 👋 / Hello 👋
+
+Je suis l'assistant de Lightsofter — agence web, livraison en 5 jours.
+I'm the Lightsofter assistant — web agency, delivery in 5 days.
+
+Écrivez-moi en français ou en anglais, je m'adapte !
+Write to me in French or English, I'll follow your language!`,
 }
 
 export default function ChatWidget() {
@@ -140,7 +146,7 @@ export default function ChatWidget() {
           onClick={() => setOpen(true)}
           className="fixed bottom-24 right-6 z-40 bg-white border border-purple-100 shadow-xl rounded-2xl px-4 py-3 max-w-[220px] cursor-pointer animate-fade-in"
         >
-          <p className="text-gray-800 text-sm font-medium leading-snug">Une question sur votre projet ? 💬</p>
+          <p className="text-gray-800 text-sm font-medium leading-snug">A question about your project? / Une question ? 💬</p>
           <button
             onClick={e => { e.stopPropagation(); setNudge(false) }}
             className="absolute -top-2 -right-2 w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-300 text-xs"
@@ -215,7 +221,7 @@ export default function ChatWidget() {
           {/* Quick suggestions — only shown before first user message */}
           {firstMsg && (
             <div className="bg-[#0f0a1e] px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-hide flex-shrink-0">
-              {['Combien coûte un site ?', 'Délais de livraison ?', 'Voir les réalisations'].map(s => (
+              {['Combien coûte un site ?', 'How much does a website cost?', 'See our work'].map(s => (
                 <button
                   key={s}
                   onClick={() => { setInput(s); setTimeout(() => inputRef.current?.focus(), 50) }}
@@ -234,7 +240,7 @@ export default function ChatWidget() {
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKey}
-              placeholder="Votre message..."
+              placeholder="Votre message / Your message..."
               maxLength={500}
               className="flex-1 bg-white/8 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-purple-500/50 focus:bg-white/10 transition-all"
               style={{ background: 'rgba(255,255,255,0.07)' }}
