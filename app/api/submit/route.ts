@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { google } from 'googleapis'
 
 interface SubmitBody {
   name: string
@@ -14,40 +13,26 @@ interface SubmitBody {
 }
 
 async function appendToSheet(data: SubmitBody) {
-  const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL
-  const key = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n')
-  const sheetId = process.env.GOOGLE_SHEET_ID
-
-  if (!email || !key || !sheetId) return
-
-  const auth = new google.auth.JWT({
-    email,
-    key,
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-  })
-
-  const sheets = google.sheets({ version: 'v4', auth })
+  const url = process.env.GOOGLE_SCRIPT_URL
+  if (!url) return
 
   const date = new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId: sheetId,
-    range: 'Leads!A:J',
-    valueInputOption: 'USER_ENTERED',
-    requestBody: {
-      values: [[
-        date,
-        data.name,
-        data.email,
-        data.phone || '—',
-        data.type || '—',
-        data.budget || '—',
-        data.deadline || '—',
-        data.goal || '—',
-        data.message || '—',
-        data.locale.toUpperCase(),
-      ]],
-    },
+  await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      date,
+      name: data.name,
+      email: data.email,
+      phone: data.phone || '—',
+      type: data.type || '—',
+      budget: data.budget || '—',
+      deadline: data.deadline || '—',
+      goal: data.goal || '—',
+      message: data.message || '—',
+      locale: data.locale.toUpperCase(),
+    }),
   })
 }
 
