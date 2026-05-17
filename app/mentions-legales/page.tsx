@@ -9,7 +9,7 @@ export default function MentionsLegalesPage() {
           <div className="space-y-6 text-gray-600 text-sm leading-relaxed">
             <div>
               <h2 className="text-lg font-bold text-gray-900 mb-2">Éditeur du site</h2>
-              <p>Lightsofter — contact@lightsofter.com</p>
+              <p>Lightsofter — amrani4online@gmail.com</p>
             </div>
             <div>
               <h2 className="text-lg font-bold text-gray-900 mb-2">Hébergement</h2>
@@ -29,7 +29,7 @@ export default function MentionsLegalesPage() {
                 Les informations collectées via le formulaire de contact sont utilisées uniquement
                 pour répondre à vos demandes. Elles ne sont pas transmises à des tiers.
                 Conformément au RGPD, vous pouvez exercer votre droit d&apos;accès, de rectification
-                ou de suppression en contactant contact@lightsofter.com.
+                ou de suppression en contactant amrani4online@gmail.com.
               </p>
             </div>
           </div>

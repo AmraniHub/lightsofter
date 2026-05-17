@@ -33,7 +33,7 @@ export default function CTA() {
               <ArrowRight className="w-5 h-5" />
             </Link>
             <a
-              href="https://wa.me/212600000000?text=Bonjour%2C%20je%20souhaite%20un%20devis%20pour%20mon%20projet."
+              href="https://wa.me/212627716149?text=Bonjour%2C%20je%20souhaite%20un%20devis%20pour%20mon%20projet."
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-white/40 text-white font-bold px-8 py-4 rounded-2xl hover:bg-white/10 transition-all duration-300 text-base"

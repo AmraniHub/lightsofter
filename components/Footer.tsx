@@ -18,6 +18,7 @@ export default function Footer() {
     { href: '/mentions-legales', label: t.footer.legal },
     { href: '/politique-confidentialite', label: t.footer.privacy },
     { href: '/cgv', label: t.footer.terms },
+    { href: '/politique-remboursement', label: t.footer.refund },
   ]
 
   return (
@@ -36,8 +37,8 @@ export default function Footer() {
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm">
                 <Mail className="w-4 h-4 text-purple-400" />
-                <a href="mailto:contact@lightsofter.com" className="hover:text-white transition-colors">
-                  contact@lightsofter.com
+                <a href="mailto:amrani4online@gmail.com" className="hover:text-white transition-colors">
+                  amrani4online@gmail.com
                 </a>
               </div>
               <div className="flex items-center gap-2 text-sm">

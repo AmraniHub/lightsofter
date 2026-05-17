@@ -246,7 +246,7 @@ export default function Home() {
                 <a href="#devis" className="inline-flex items-center justify-center gap-2 bg-white text-purple-700 font-bold px-8 py-4 rounded-2xl hover:bg-purple-50 transition-all shadow-xl hover:-translate-y-0.5">
                   {t.cta.btn_primary} <ArrowRight className="w-5 h-5" />
                 </a>
-                <a href="https://wa.me/212600000000?text=Bonjour" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 border-2 border-white/25 text-white font-bold px-8 py-4 rounded-2xl hover:bg-white/10 transition-all">
+                <a href="https://wa.me/212627716149?text=Bonjour" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 border-2 border-white/25 text-white font-bold px-8 py-4 rounded-2xl hover:bg-white/10 transition-all">
                   {WA_ICON} {t.cta.btn_wa}
                 </a>
               </div>

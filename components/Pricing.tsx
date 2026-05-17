@@ -40,7 +40,7 @@ export default function Pricing() {
       cta: t.pricing.plan3_cta,
       ctaIcon: MessageCircle,
       popular: false,
-      stripe: 'https://wa.me/212600000000?text=Bonjour',
+      stripe: 'https://wa.me/212627716149?text=Bonjour',
       highlight: false,
     },
   ]

@@ -30,7 +30,7 @@ export default function PolitiqueConfidentialitePage() {
               <h2 className="text-lg font-bold text-gray-900 mb-2">Vos droits</h2>
               <p>
                 Vous disposez d&apos;un droit d&apos;accès, de rectification, d&apos;effacement et de portabilité
-                de vos données. Pour exercer ces droits, contactez-nous à contact@lightsofter.com.
+                de vos données. Pour exercer ces droits, contactez-nous à amrani4online@gmail.com.
               </p>
             </div>
           </div>

@@ -45,7 +45,7 @@ export default function CGVPage() {
             </div>
             <div>
               <h2 className="text-lg font-bold text-gray-900 mb-2">6. Contact</h2>
-              <p>Pour toute question : contact@lightsofter.com</p>
+              <p>Pour toute question : amrani4online@gmail.com</p>
             </div>
           </div>
         </div>
