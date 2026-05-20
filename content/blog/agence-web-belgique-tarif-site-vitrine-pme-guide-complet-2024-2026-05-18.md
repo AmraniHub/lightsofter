@@ -4,6 +4,7 @@ description: "Découvrez les tarifs réalistes d'une agence web Belgique pour vo
 date: "2026-05-18"
 keywords: "agence web Belgique tarif site vitrine PME, prix site vitrine Belgique, coût création site web PME"
 category: "Guide"
+image: "https://image.pollinations.ai/prompt/web%20agency%20Belgium%20PME%20site%20vitrine%20professional%2C%20business%20website%20showcase%2C%20purple%20violet%20gradient%2C%20clean%20modern%20minimalist%20illustration%2C%20no%20text%2C%20no%20watermark?width=1200&height=630&seed=518&model=flux&nologo=true"
 ---
 
 # Agence Web Belgique Tarif Site Vitrine PME : Le Guide Complet

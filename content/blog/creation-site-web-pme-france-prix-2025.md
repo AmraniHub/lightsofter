@@ -4,6 +4,7 @@ description: "Prix, délais, prestataires : tout ce qu'une PME française doit s
 date: "2025-05-01"
 keywords: "création site web PME France prix 2025, coût site web professionnel, agence web France tarif"
 category: "Guide"
+image: "https://image.pollinations.ai/prompt/website%20creation%20cost%20France%20PME%20business%2C%20price%20comparison%20chart%2C%20purple%20violet%20gradient%2C%20clean%20modern%20infographic%20style%2C%20professional%2C%20no%20text%2C%20no%20watermark?width=1200&height=630&seed=501&model=flux&nologo=true"
 ---
 
 ## Création site web PME France prix 2025 : ce que ça coûte vraiment

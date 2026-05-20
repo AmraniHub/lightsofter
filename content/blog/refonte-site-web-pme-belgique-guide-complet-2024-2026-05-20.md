@@ -1,10 +1,10 @@
-```markdown
 ---
 title: "Refonte site web PME Belgique : Guide complet 2024"
 description: "Refonte site web PME Belgique : découvrez notre guide complet pour moderniser votre site et augmenter vos ventes en ligne."
 date: "2024-05-20"
 keywords: "refonte site web PME Belgique guide complet, refonte site internet PME, moderniser son site web Belgique"
 category: "Guide"
+image: "https://image.pollinations.ai/prompt/website%20redesign%20Belgium%20PME%20business%2C%20before%20after%20transformation%2C%20purple%20violet%20accent%20colors%2C%20clean%20modern%20digital%20illustration%2C%20no%20text%2C%20no%20watermark?width=1200&height=630&seed=520&model=flux&nologo=true"
 ---
 
 # Refonte Site Web PME Belgique : Guide Complet pour Moderniser Votre Présence En Ligne
