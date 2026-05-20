@@ -9,7 +9,7 @@ const content = {
     sections: [
       { h: 'Données collectées', p: "Nous collectons les données que vous nous communiquez via le formulaire de contact : nom, email, téléphone, informations sur votre projet. Ces données sont utilisées uniquement pour traiter votre demande." },
       { h: 'Conservation', p: "Vos données sont conservées pendant la durée nécessaire au traitement de votre demande et pendant 3 ans à des fins de gestion de la relation client." },
-      { h: 'Vos droits', p: "Vous disposez d'un droit d'accès, de rectification, d'effacement et de portabilité de vos données. Pour exercer ces droits, contactez-nous à amrani4online@gmail.com." },
+      { h: 'Vos droits', p: "Vous disposez d'un droit d'accès, de rectification, d'effacement et de portabilité de vos données. Pour exercer ces droits, contactez-nous via notre formulaire de contact." },
       { h: 'Cookies', p: "Ce site utilise des cookies analytiques (Google Analytics 4) pour mesurer l'audience. Vous pouvez les refuser en utilisant les paramètres de votre navigateur." },
     ],
   },
@@ -19,7 +19,7 @@ const content = {
     sections: [
       { h: 'Data collected', p: 'We collect data you provide via the contact form: name, email, phone, project details. This data is used solely to process your request.' },
       { h: 'Retention', p: 'Your data is retained for as long as necessary to handle your request and for 3 years for client relationship management purposes.' },
-      { h: 'Your rights', p: 'You have the right to access, correct, delete and export your data. To exercise these rights, contact us at amrani4online@gmail.com.' },
+      { h: 'Your rights', p: 'You have the right to access, correct, delete and export your data. To exercise these rights, contact us via our contact form.' },
       { h: 'Cookies', p: 'This site uses analytical cookies (Google Analytics 4) to measure audience. You can refuse them via your browser settings.' },
     ],
   },

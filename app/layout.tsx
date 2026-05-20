@@ -43,7 +43,6 @@ const schemaOrg = {
       url: 'https://lightsofter.vercel.app',
       logo: { '@type': 'ImageObject', url: 'https://lightsofter.vercel.app/logo.png' },
       description: 'Agence de création de sites web et applications mobiles pour les PME en France et Belgique.',
-      email: 'amrani4online@gmail.com',
       contactPoint: {
         '@type': 'ContactPoint',
         telephone: '+212627716149',

@@ -46,7 +46,7 @@ const content = {
       },
       {
         h: '7. Procédure de remboursement',
-        p: "Contactez-nous à amrani4online@gmail.com avec l'objet \"Demande de remboursement — [votre nom]\". Nous répondons sous 48h ouvrées et traitons les remboursements éligibles sous 5 à 10 jours ouvrés.",
+        p: "Contactez-nous via le formulaire sur lightsofter.vercel.app/contact avec l'objet \"Demande de remboursement — [votre nom]\". Nous répondons sous 48h ouvrées et traitons les remboursements éligibles sous 5 à 10 jours ouvrés.",
       },
     ],
     cta_title: 'Un problème ? Contactez-nous d\'abord.',
@@ -95,7 +95,7 @@ const content = {
       },
       {
         h: '7. Refund procedure',
-        p: 'Contact us at amrani4online@gmail.com with the subject "Refund request — [your name]". We respond within 48 business hours and process eligible refunds within 5–10 business days.',
+        p: 'Contact us via the form at lightsofter.vercel.app/contact with the subject "Refund request — [your name]". We respond within 48 business hours and process eligible refunds within 5–10 business days.',
       },
     ],
     cta_title: 'Have an issue? Contact us first.',

@@ -11,7 +11,7 @@ const content = {
       { h: '3. Délais de livraison', p: "Les délais indiqués sont donnés à titre indicatif et courent à partir de la réception du brief complet et de l'acompte. Lightsofter s'engage à respecter ces délais sauf cas de force majeure ou retard dû au client." },
       { h: '4. Révisions', p: "Le nombre de révisions incluses est précisé dans chaque offre. Les révisions supplémentaires sont facturées à 50€/heure." },
       { h: '5. Propriété intellectuelle', p: "Les droits sur le site/application sont transférés au client dès le paiement intégral de la prestation. Lightsofter conserve le droit de mentionner le projet dans son portfolio." },
-      { h: '6. Contact', p: 'Pour toute question : amrani4online@gmail.com' },
+      { h: '6. Contact', p: 'Pour toute question, utilisez notre formulaire de contact sur lightsofter.vercel.app/contact.' },
     ],
   },
   en: {
@@ -22,7 +22,7 @@ const content = {
       { h: '3. Delivery timelines', p: 'Stated timelines are indicative and begin upon receipt of the complete brief and deposit. Lightsofter commits to meeting these deadlines except in cases of force majeure or client-caused delays.' },
       { h: '4. Revisions', p: 'The number of revisions included is specified in each offer. Additional revisions are billed at €50/hour.' },
       { h: '5. Intellectual property', p: 'Rights to the site/application are transferred to the client upon full payment. Lightsofter retains the right to reference the project in its portfolio.' },
-      { h: '6. Contact', p: 'For any questions: amrani4online@gmail.com' },
+      { h: '6. Contact', p: 'For any questions, use our contact form at lightsofter.vercel.app/contact.' },
     ],
   },
 }

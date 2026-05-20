@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, MapPin } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import { useT } from './LangProvider'
 
 export default function Footer() {
@@ -35,12 +35,6 @@ export default function Footer() {
             </Link>
             <p className="text-sm leading-relaxed max-w-sm">{t.footer.tagline}</p>
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm">
-                <Mail className="w-4 h-4 text-purple-400" />
-                <a href="mailto:amrani4online@gmail.com" className="hover:text-white transition-colors">
-                  amrani4online@gmail.com
-                </a>
-              </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="w-4 h-4 text-purple-400" />
                 <span>{t.footer.location}</span>
