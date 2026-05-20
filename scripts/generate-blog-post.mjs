@@ -186,7 +186,9 @@ category: "${cluster.category}"
 
   if (!res.ok) throw new Error(`Claude API error: ${res.status}`)
   const data = await res.json()
-  return data.content[0].text
+  // Strip markdown code fences Claude sometimes wraps around the response
+  const raw = data.content[0].text
+  return raw.replace(/^```(?:markdown)?\s*/i, '').replace(/\s*```\s*$/i, '').trim()
 }
 
 // ── Send Telegram notification ───────────────────────────────────────────────

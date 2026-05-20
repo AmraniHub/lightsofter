@@ -17,12 +17,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/politique-remboursement`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.2 },
   ]
 
-  const blogPages: MetadataRoute.Sitemap = posts.map(post => ({
-    url: `${BASE}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
-    changeFrequency: 'monthly',
-    priority: 0.8,
-  }))
+  const blogPages: MetadataRoute.Sitemap = posts
+    .filter(post => post.date && !isNaN(new Date(post.date).getTime()))
+    .map(post => ({
+      url: `${BASE}/blog/${post.slug}`,
+      lastModified: new Date(post.date),
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    }))
 
   return [...staticPages, ...blogPages]
 }

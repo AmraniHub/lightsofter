@@ -1,4 +1,3 @@
-```markdown
 ---
 title: "Agence Web Belgique Tarif Site Vitrine PME : Guide Complet 2024"
 description: "Découvrez les tarifs réalistes d'une agence web Belgique pour votre site vitrine PME. Comparatif, conseils et solutions rapides."
