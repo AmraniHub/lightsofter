@@ -4,7 +4,7 @@ description: "Site web e-commerce PME France 2025 guide complet : plateforme, co
 date: "2026-05-22"
 keywords: "site web e-commerce PME France 2025 guide, créer site e-commerce PME, plateforme e-commerce PME 2025, solution e-commerce petite entreprise"
 category: "E-commerce"
-image: "/blog-images/site-web-e-commerce-pme-france-2025-guide-tout-ce-que-vous-devez-savoir-2026-05-22.jpg"
+image: "https://image.pollinations.ai/prompt/e-commerce%20online%20store%20France%20PME%202025%2C%20shopping%20cart%20digital%20commerce%2C%20purple%20violet%20accent%20colors%2C%20clean%20modern%20minimalist%20illustration%2C%20no%20text%2C%20no%20watermark?width=1200&height=630&seed=833&model=flux&nologo=true"
 ---
 
 # Site Web E-Commerce PME France 2025 Guide : Tout Ce Que Vous Devez Savoir

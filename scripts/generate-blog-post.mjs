@@ -12,7 +12,6 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const BLOG_DIR = path.join(__dirname, '..', 'content', 'blog')
-const IMG_DIR = path.join(__dirname, '..', 'public', 'blog-images')
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
@@ -287,35 +286,16 @@ const CATEGORY_HINTS = {
   Tendances: 'digital transformation innovation, futuristic technology, business evolution',
 }
 
-async function generateImage(cluster, title, slug) {
-  try {
-    const hint = CATEGORY_HINTS[cluster.category] || 'web agency professional digital'
-    const prompt = encodeURIComponent(
-      `${hint}, purple violet accent color, clean modern minimalist illustration, high quality, no text, no watermark`
-    )
-    const seed = Math.floor(Math.random() * 9999)
-    const url = `https://image.pollinations.ai/prompt/${prompt}?width=1200&height=630&seed=${seed}&model=flux&nologo=true`
-
-    console.log('🖼️  Generating image via Pollinations...')
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 60000)
-
-    const res = await fetch(url, { signal: controller.signal })
-    clearTimeout(timeout)
-
-    if (!res.ok) throw new Error(`Pollinations error: ${res.status}`)
-
-    const buffer = await res.arrayBuffer()
-    if (!fs.existsSync(IMG_DIR)) fs.mkdirSync(IMG_DIR, { recursive: true })
-
-    const imgPath = path.join(IMG_DIR, `${slug}.jpg`)
-    fs.writeFileSync(imgPath, Buffer.from(buffer))
-    console.log(`✅ Image saved: ${imgPath}`)
-    return `/blog-images/${slug}.jpg`
-  } catch (err) {
-    console.warn(`⚠️  Image generation skipped: ${err.message}`)
-    return null
-  }
+function generateImageUrl(cluster) {
+  // Return a Pollinations URL directly — no download needed, no local file to commit
+  const hint = CATEGORY_HINTS[cluster.category] || 'web agency professional digital'
+  const prompt = encodeURIComponent(
+    `${hint}, purple violet accent color, clean modern minimalist illustration, high quality, no text, no watermark`
+  )
+  const seed = Math.floor(Math.random() * 9999)
+  const url = `https://image.pollinations.ai/prompt/${prompt}?width=1200&height=630&seed=${seed}&model=flux&nologo=true`
+  console.log(`🖼️  Image URL: ${url}`)
+  return url
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
@@ -337,8 +317,8 @@ async function main() {
   const descMatch = articleContent.match(/description:\s*"([^"]+)"/)
   const description = descMatch ? descMatch[1] : ''
 
-  const [imagePath, redditPost, quoraAnswer] = await Promise.all([
-    generateImage(cluster, title, slug),
+  const imageUrl = generateImageUrl(cluster)
+  const [redditPost, quoraAnswer] = await Promise.all([
     generateRedditPost(cluster, title, description),
     generateQuoraAnswer(cluster, title, description),
   ])
@@ -346,9 +326,7 @@ async function main() {
   // Inject image into frontmatter and save file
   if (!fs.existsSync(BLOG_DIR)) fs.mkdirSync(BLOG_DIR, { recursive: true })
   const filePath = path.join(BLOG_DIR, `${slug}.md`)
-  const finalContent = imagePath
-    ? articleContent.replace(/^(---\n[\s\S]*?)(---)(\n)/, `$1image: "${imagePath}"\n$2$3`)
-    : articleContent
+  const finalContent = articleContent.replace(/^(---\n[\s\S]*?)(---)(\n)/, `$1image: "${imageUrl}"\n$2$3`)
   fs.writeFileSync(filePath, finalContent, 'utf-8')
   console.log(`✅ Article saved: ${filePath}`)
 

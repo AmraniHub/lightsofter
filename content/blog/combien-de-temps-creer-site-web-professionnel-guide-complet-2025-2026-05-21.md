@@ -4,7 +4,7 @@ description: "Découvrez combien de temps créer site web professionnel. Délais
 date: "2026-05-21"
 keywords: "combien de temps créer site web professionnel, délai création site internet, durée développement site web"
 category: "Guide"
-image: "/blog-images/combien-de-temps-creer-site-web-professionnel-guide-complet-2025-2026-05-21.jpg"
+image: "https://image.pollinations.ai/prompt/professional%20website%20creation%20timeline%2C%20calendar%20planning%20France%20PME%2C%20purple%20violet%20gradient%2C%20clean%20modern%20minimalist%20illustration%2C%20no%20text%2C%20no%20watermark?width=1200&height=630&seed=611&model=flux&nologo=true"
 ---
 
 # Combien de temps créer site web professionnel : Le guide complet pour les PME
