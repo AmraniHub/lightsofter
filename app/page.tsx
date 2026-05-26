@@ -34,7 +34,7 @@ export default function Home() {
   ]
 
   const testimonials = [
-    { name: 'Marie L.', role: locale === 'en' ? 'Restaurant owner' : 'Restauratrice', city: 'Paris 🇫🇷', text: locale === 'en' ? 'Site delivered in 4 days. Since then, our online bookings have exploded. Ultra-responsive team.' : 'Site livré en 4 jours. Depuis, nos réservations en ligne ont explosé. Équipe ultra réactive.', rating: 5 },
+    { name: 'Marie L.', role: locale === 'en' ? 'Restaurant owner' : 'Restauratrice', city: 'Paris 🇫🇷', text: locale === 'en' ? 'Site delivered in under 24h. Since then, our online bookings have exploded. Ultra-responsive team.' : 'Site livré en moins de 24h. Depuis, nos réservations en ligne ont explosé. Équipe ultra réactive.', rating: 5 },
     { name: 'Thomas D.', role: locale === 'en' ? 'Pharmacist' : 'Pharmacien', city: 'Bruxelles 🇧🇪', text: locale === 'en' ? 'Our Android app transformed how we manage prescriptions. Results far beyond expectations.' : 'Notre app Android a transformé notre gestion des ordonnances. Résultat bien au-delà de nos attentes.', rating: 5 },
     { name: 'Sophie M.', role: locale === 'en' ? 'Notary' : 'Notaire', city: 'Lyon 🇫🇷', text: locale === 'en' ? 'Brief understood first time, fast revisions. Our firm finally has a proper online presence.' : 'Brief compris du premier coup, révisions rapides. Cabinet enfin présent sur le web de façon pro.', rating: 5 },
   ]
