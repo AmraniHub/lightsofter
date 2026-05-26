@@ -1,0 +1,478 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+interface Lead {
+  ID: string
+  Date: string
+  Source: string
+  Nom: string
+  Téléphone: string
+  Business: string
+  Ville: string
+  Secteur: string
+  Statut: string
+  Notes: string
+  WhatsApp: string
+}
+
+interface Project {
+  ID: string
+  Date: string
+  Client: string
+  Business: string
+  Type: string
+  Statut: string
+  'Prix (€)': string
+  Début: string
+  Livraison: string
+  URL: string
+  Notes: string
+}
+
+const LEAD_STATUSES    = ['Nouveau','Contacté','Devis envoyé','Client','Perdu']
+const PROJECT_STATUSES = ['Brief','En cours','Révision','Livré','Maintenance','Archivé']
+const PROJECT_TYPES    = ['Site vitrine','E-commerce','Application Android','Application Web','SEO','Autre']
+
+const STATUS_COLORS: Record<string, string> = {
+  Nouveau:       'bg-blue-100 text-blue-700',
+  Contacté:      'bg-yellow-100 text-yellow-700',
+  'Devis envoyé':'bg-purple-100 text-purple-700',
+  Client:        'bg-green-100 text-green-700',
+  Perdu:         'bg-red-100 text-red-600',
+  Brief:         'bg-sky-100 text-sky-700',
+  'En cours':    'bg-orange-100 text-orange-700',
+  Révision:      'bg-violet-100 text-violet-700',
+  Livré:         'bg-green-100 text-green-700',
+  Maintenance:   'bg-teal-100 text-teal-700',
+  Archivé:       'bg-gray-100 text-gray-500',
+}
+
+const SOURCE_COLORS: Record<string, string> = {
+  MonSalonVip:  'bg-pink-100 text-pink-700',
+  Lightsofter:  'bg-purple-100 text-purple-700',
+  'Meta Ads':   'bg-blue-100 text-blue-700',
+  Organic:      'bg-green-100 text-green-700',
+  Referral:     'bg-yellow-100 text-yellow-700',
+}
+
+// ── Auth screen ───────────────────────────────────────────────────────────────
+function AuthScreen({ onAuth }: { onAuth: (p: string) => void }) {
+  const [pw, setPw] = useState('')
+  const [err, setErr] = useState(false)
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    const res = await fetch('/api/crm?type=leads', {
+      headers: { 'x-crm-password': pw },
+    })
+    if (res.ok) {
+      sessionStorage.setItem('crm_pw', pw)
+      onAuth(pw)
+    } else {
+      setErr(true)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center px-6">
+      <div className="bg-gray-900 border border-gray-700 rounded-3xl p-10 w-full max-w-sm shadow-2xl">
+        <div className="text-center mb-8">
+          <div className="text-4xl mb-3">🔐</div>
+          <h1 className="text-2xl font-black text-white">Lightsofter CRM</h1>
+          <p className="text-gray-500 text-sm mt-1">Accès réservé</p>
+        </div>
+        <form onSubmit={submit} className="space-y-4">
+          <input
+            type="password" required placeholder="Mot de passe"
+            value={pw} onChange={e => { setPw(e.target.value); setErr(false) }}
+            className="w-full bg-gray-800 border border-gray-600 text-white placeholder-gray-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500 transition"
+          />
+          {err && <p className="text-red-400 text-sm">Mot de passe incorrect</p>}
+          <button type="submit"
+            className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-xl transition">
+            Accéder au CRM →
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+// ── Add Project Modal ─────────────────────────────────────────────────────────
+function AddProjectModal({ pw, onClose, onAdded }: { pw: string; onClose: () => void; onAdded: () => void }) {
+  const [form, setForm] = useState({ client: '', business: '', type: 'Site vitrine', price: '490', dueDate: '', url: '', notes: '' })
+  const [loading, setLoading] = useState(false)
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    await fetch('/api/crm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-crm-password': pw },
+      body: JSON.stringify({ action: 'addProject', ...form }),
+    })
+    setLoading(false)
+    onAdded()
+    onClose()
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-6" onClick={onClose}>
+      <div className="bg-gray-900 border border-gray-700 rounded-3xl p-8 w-full max-w-md shadow-2xl" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-black text-white">Nouveau projet</h3>
+          <button onClick={onClose} className="text-gray-500 hover:text-white text-xl">✕</button>
+        </div>
+        <form onSubmit={submit} className="space-y-4">
+          {[
+            { label: 'Nom du client *', key: 'client', type: 'text', ph: 'Marie Dupont' },
+            { label: 'Nom du business *', key: 'business', type: 'text', ph: 'Salon Éléonore' },
+            { label: 'Prix (€)', key: 'price', type: 'number', ph: '490' },
+            { label: 'Date de livraison', key: 'dueDate', type: 'date', ph: '' },
+            { label: 'URL du site (après livraison)', key: 'url', type: 'url', ph: 'https://...' },
+          ].map(f => (
+            <div key={f.key}>
+              <label className="block text-sm text-gray-400 mb-1">{f.label}</label>
+              <input type={f.type} placeholder={f.ph}
+                value={(form as any)[f.key]} onChange={e => setForm({ ...form, [f.key]: e.target.value })}
+                className="w-full bg-gray-800 border border-gray-600 text-white placeholder-gray-500 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 transition"
+              />
+            </div>
+          ))}
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">Type de projet</label>
+            <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}
+              className="w-full bg-gray-800 border border-gray-600 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 transition cursor-pointer">
+              {PROJECT_TYPES.map(t => <option key={t}>{t}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">Notes</label>
+            <textarea value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })}
+              rows={2} placeholder="Infos importantes..."
+              className="w-full bg-gray-800 border border-gray-600 text-white placeholder-gray-500 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 transition resize-none"
+            />
+          </div>
+          <button type="submit" disabled={loading || !form.client || !form.business}
+            className="w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition">
+            {loading ? 'Ajout...' : '+ Créer le projet'}
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+// ── Main CRM ──────────────────────────────────────────────────────────────────
+export default function CRMPage() {
+  const [pw, setPw] = useState<string | null>(null)
+  const [tab, setTab] = useState<'leads' | 'projects'>('leads')
+  const [leads, setLeads] = useState<Lead[]>([])
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(false)
+  const [filterStatus, setFilterStatus] = useState('Tous')
+  const [filterSource, setFilterSource] = useState('Tous')
+  const [search, setSearch] = useState('')
+  const [showAddProject, setShowAddProject] = useState(false)
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
+
+  // Check session
+  useEffect(() => {
+    const saved = sessionStorage.getItem('crm_pw')
+    if (saved) setPw(saved)
+  }, [])
+
+  const fetchData = useCallback(async (type: 'leads' | 'projects', password: string) => {
+    setLoading(true)
+    try {
+      const res  = await fetch(`/api/crm?type=${type}`, { headers: { 'x-crm-password': password } })
+      const json = await res.json()
+      if (type === 'leads')    setLeads((json.data || []).reverse())
+      if (type === 'projects') setProjects((json.data || []).reverse())
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (pw) fetchData(tab, pw)
+  }, [pw, tab, fetchData])
+
+  async function updateLeadStatus(id: string, status: string) {
+    if (!pw) return
+    setUpdatingId(id)
+    await fetch('/api/crm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-crm-password': pw },
+      body: JSON.stringify({ action: 'updateLead', id, status }),
+    })
+    setLeads(prev => prev.map(l => l.ID === id ? { ...l, Statut: status } : l))
+    setUpdatingId(null)
+  }
+
+  async function updateProjectStatus(id: string, status: string) {
+    if (!pw) return
+    setUpdatingId(id)
+    await fetch('/api/crm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-crm-password': pw },
+      body: JSON.stringify({ action: 'updateProject', id, status }),
+    })
+    setProjects(prev => prev.map(p => p.ID === id ? { ...p, Statut: status } : p))
+    setUpdatingId(null)
+  }
+
+  if (!pw) return <AuthScreen onAuth={p => setPw(p)} />
+
+  // ── Filter leads ──────────────────────────────────────────────────────────
+  const filteredLeads = leads.filter(l => {
+    const matchStatus = filterStatus === 'Tous' || l.Statut === filterStatus
+    const matchSource = filterSource === 'Tous' || l.Source === filterSource
+    const matchSearch = !search || [l.Nom, l.Business, l.Ville, l.Téléphone].join(' ').toLowerCase().includes(search.toLowerCase())
+    return matchStatus && matchSource && matchSearch
+  })
+
+  const filteredProjects = projects.filter(p => {
+    const matchStatus = filterStatus === 'Tous' || p.Statut === filterStatus
+    const matchSearch = !search || [p.Client, p.Business, p.Type].join(' ').toLowerCase().includes(search.toLowerCase())
+    return matchStatus && matchSearch
+  })
+
+  // ── Stats ─────────────────────────────────────────────────────────────────
+  const stats = {
+    total:    leads.length,
+    nouveau:  leads.filter(l => l.Statut === 'Nouveau').length,
+    clients:  leads.filter(l => l.Statut === 'Client').length,
+    salons:   leads.filter(l => l.Source === 'MonSalonVip').length,
+    revenue:  projects.filter(p => p.Statut !== 'Archivé').reduce((s, p) => s + (parseFloat(p['Prix (€)']) || 0), 0),
+    inProgress: projects.filter(p => p.Statut === 'En cours' || p.Statut === 'Brief').length,
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-950 text-white">
+
+      {/* ── HEADER ──────────────────────────────────────────────── */}
+      <header className="bg-gray-900 border-b border-gray-800 px-6 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-sm font-bold">L</div>
+            <div>
+              <h1 className="text-white font-bold text-base leading-none">Lightsofter CRM</h1>
+              <p className="text-gray-500 text-xs">Dashboard privé</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <button onClick={() => fetchData(tab, pw)}
+              className="text-gray-400 hover:text-white text-sm px-3 py-1.5 rounded-lg hover:bg-gray-800 transition">
+              ↻ Refresh
+            </button>
+            <button onClick={() => { sessionStorage.removeItem('crm_pw'); setPw(null) }}
+              className="text-gray-500 hover:text-red-400 text-sm transition">
+              Déconnexion
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+        {/* ── STATS ─────────────────────────────────────────────── */}
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+          {[
+            { label: 'Total leads', value: stats.total, color: 'text-white' },
+            { label: 'Nouveaux', value: stats.nouveau, color: 'text-blue-400' },
+            { label: 'Clients', value: stats.clients, color: 'text-green-400' },
+            { label: 'Salons (MSV)', value: stats.salons, color: 'text-pink-400' },
+            { label: 'Projets actifs', value: stats.inProgress, color: 'text-orange-400' },
+            { label: 'CA projets', value: `${stats.revenue.toLocaleString('fr-FR')}€`, color: 'text-purple-400' },
+          ].map(s => (
+            <div key={s.label} className="bg-gray-900 border border-gray-800 rounded-2xl p-4 text-center">
+              <p className={`text-2xl font-black ${s.color}`}>{s.value}</p>
+              <p className="text-gray-500 text-xs mt-1">{s.label}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* ── TABS ──────────────────────────────────────────────── */}
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex gap-2 bg-gray-900 border border-gray-800 rounded-xl p-1">
+            {(['leads', 'projects'] as const).map(t => (
+              <button key={t} onClick={() => { setTab(t); setFilterStatus('Tous'); setSearch('') }}
+                className={`px-5 py-2 rounded-lg text-sm font-semibold transition ${tab === t ? 'bg-purple-600 text-white' : 'text-gray-400 hover:text-white'}`}>
+                {t === 'leads' ? `💬 Leads (${leads.length})` : `🚀 Projets (${projects.length})`}
+              </button>
+            ))}
+          </div>
+          {tab === 'projects' && (
+            <button onClick={() => setShowAddProject(true)}
+              className="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2 rounded-xl text-sm transition">
+              + Nouveau projet
+            </button>
+          )}
+        </div>
+
+        {/* ── FILTERS ───────────────────────────────────────────── */}
+        <div className="flex flex-wrap gap-3">
+          <input value={search} onChange={e => setSearch(e.target.value)}
+            placeholder="Rechercher..."
+            className="bg-gray-900 border border-gray-700 text-white placeholder-gray-500 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-purple-500 transition w-48"
+          />
+          <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)}
+            className="bg-gray-900 border border-gray-700 text-white rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-purple-500 transition cursor-pointer">
+            <option>Tous</option>
+            {(tab === 'leads' ? LEAD_STATUSES : PROJECT_STATUSES).map(s => <option key={s}>{s}</option>)}
+          </select>
+          {tab === 'leads' && (
+            <select value={filterSource} onChange={e => setFilterSource(e.target.value)}
+              className="bg-gray-900 border border-gray-700 text-white rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-purple-500 transition cursor-pointer">
+              <option>Tous</option>
+              {['MonSalonVip','Lightsofter','Meta Ads','Organic','Referral'].map(s => <option key={s}>{s}</option>)}
+            </select>
+          )}
+        </div>
+
+        {/* ── LOADING ───────────────────────────────────────────── */}
+        {loading && (
+          <div className="text-center py-12 text-gray-500">
+            <div className="text-3xl animate-pulse mb-2">⏳</div>
+            Chargement depuis Google Sheets...
+          </div>
+        )}
+
+        {/* ── LEADS TABLE ───────────────────────────────────────── */}
+        {!loading && tab === 'leads' && (
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+            {filteredLeads.length === 0 ? (
+              <div className="text-center py-16 text-gray-500">
+                <div className="text-4xl mb-3">📭</div>
+                <p>Aucun lead trouvé</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-800 text-gray-400 text-xs uppercase">
+                    <tr>
+                      {['Date','Source','Nom','Business / Ville','Téléphone','Statut','Actions'].map(h => (
+                        <th key={h} className="px-4 py-3 text-left font-semibold">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-800">
+                    {filteredLeads.map(lead => (
+                      <tr key={lead.ID} className="hover:bg-gray-800/50 transition-colors">
+                        <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{lead.Date?.split(' ')[0] || '—'}</td>
+                        <td className="px-4 py-3">
+                          <span className={`text-xs font-semibold px-2 py-1 rounded-full ${SOURCE_COLORS[lead.Source] || 'bg-gray-700 text-gray-300'}`}>
+                            {lead.Source || '—'}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 font-semibold text-white">{lead.Nom || '—'}</td>
+                        <td className="px-4 py-3">
+                          <p className="text-white text-xs">{lead.Business || '—'}</p>
+                          <p className="text-gray-500 text-xs">{lead.Ville || ''}</p>
+                        </td>
+                        <td className="px-4 py-3">
+                          {lead.WhatsApp && lead.WhatsApp !== '—' ? (
+                            <a href={lead.WhatsApp} target="_blank" rel="noopener"
+                              className="flex items-center gap-1.5 text-green-400 hover:text-green-300 transition text-xs font-medium">
+                              💬 {lead.Téléphone}
+                            </a>
+                          ) : (
+                            <span className="text-gray-500 text-xs">{lead.Téléphone || '—'}</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3">
+                          <select
+                            value={lead.Statut || 'Nouveau'}
+                            onChange={e => updateLeadStatus(lead.ID, e.target.value)}
+                            disabled={updatingId === lead.ID}
+                            className={`text-xs font-semibold px-2 py-1 rounded-lg border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-purple-500 ${STATUS_COLORS[lead.Statut] || 'bg-gray-700 text-gray-300'}`}
+                          >
+                            {LEAD_STATUSES.map(s => <option key={s}>{s}</option>)}
+                          </select>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex gap-2">
+                            {lead.WhatsApp && lead.WhatsApp !== '—' && (
+                              <a href={lead.WhatsApp} target="_blank" rel="noopener"
+                                className="bg-green-600 hover:bg-green-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition">
+                                WA
+                              </a>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── PROJECTS TABLE ────────────────────────────────────── */}
+        {!loading && tab === 'projects' && (
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+            {filteredProjects.length === 0 ? (
+              <div className="text-center py-16 text-gray-500">
+                <div className="text-4xl mb-3">🚀</div>
+                <p>Aucun projet — créez le premier</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-800 text-gray-400 text-xs uppercase">
+                    <tr>
+                      {['Date','Client','Business','Type','Prix','Livraison','Statut','URL'].map(h => (
+                        <th key={h} className="px-4 py-3 text-left font-semibold">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-800">
+                    {filteredProjects.map(proj => (
+                      <tr key={proj.ID} className="hover:bg-gray-800/50 transition-colors">
+                        <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{proj.Date?.split(' ')[0] || '—'}</td>
+                        <td className="px-4 py-3 font-semibold text-white">{proj.Client || '—'}</td>
+                        <td className="px-4 py-3 text-gray-300 text-xs">{proj.Business || '—'}</td>
+                        <td className="px-4 py-3">
+                          <span className="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded-full">{proj.Type || '—'}</span>
+                        </td>
+                        <td className="px-4 py-3 font-bold text-green-400">{proj['Prix (€)'] ? `${proj['Prix (€)']}€` : '—'}</td>
+                        <td className="px-4 py-3 text-gray-400 text-xs">{proj.Livraison || '—'}</td>
+                        <td className="px-4 py-3">
+                          <select
+                            value={proj.Statut || 'Brief'}
+                            onChange={e => updateProjectStatus(proj.ID, e.target.value)}
+                            disabled={updatingId === proj.ID}
+                            className={`text-xs font-semibold px-2 py-1 rounded-lg border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-purple-500 ${STATUS_COLORS[proj.Statut] || 'bg-gray-700 text-gray-300'}`}
+                          >
+                            {PROJECT_STATUSES.map(s => <option key={s}>{s}</option>)}
+                          </select>
+                        </td>
+                        <td className="px-4 py-3">
+                          {proj.URL && proj.URL !== '—' ? (
+                            <a href={proj.URL} target="_blank" rel="noopener"
+                              className="text-purple-400 hover:text-purple-300 text-xs underline transition">
+                              Voir →
+                            </a>
+                          ) : <span className="text-gray-600 text-xs">—</span>}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+      </div>
+
+      {showAddProject && pw && (
+        <AddProjectModal pw={pw} onClose={() => setShowAddProject(false)} onAdded={() => fetchData('projects', pw)} />
+      )}
+    </div>
+  )
+}
