@@ -16,22 +16,25 @@ async function appendToSheet(data: SubmitBody) {
   const url = process.env.GOOGLE_SCRIPT_URL
   if (!url) return
 
-  const date = new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })
-
-  const params = new URLSearchParams({
-    date,
-    name: data.name,
-    email: data.email,
-    phone: data.phone || '—',
-    type: data.type || '—',
-    budget: data.budget || '—',
-    deadline: data.deadline || '—',
-    goal: data.goal || '—',
-    message: data.message || '—',
-    locale: data.locale.toUpperCase(),
+  await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action:   'addLead',
+      source:   'Lightsofter',
+      name:     data.name,
+      phone:    data.phone || '—',
+      business: data.email || '—',   // email stored in business field (no email column in Leads sheet)
+      city:     data.locale === 'en' ? 'Belgium/International' : 'France',
+      sector:   data.type || '—',
+      notes:    [
+        data.goal   ? `Objectif: ${data.goal}` : null,
+        data.budget ? `Budget: ${data.budget}` : null,
+        data.deadline ? `Délai: ${data.deadline}` : null,
+        data.message ? `Message: ${data.message}` : null,
+      ].filter(Boolean).join(' | ') || '—',
+    }),
   })
-
-  await fetch(`${url}?${params.toString()}`, { method: 'GET' })
 }
 
 async function sendTelegram(data: SubmitBody) {

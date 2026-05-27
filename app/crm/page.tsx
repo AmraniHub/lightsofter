@@ -165,6 +165,100 @@ function AddProjectModal({ pw, onClose, onAdded }: { pw: string; onClose: () => 
   )
 }
 
+// ── Lead Notes Modal ──────────────────────────────────────────────────────────
+function LeadNotesModal({ lead, pw, onClose, onSaved }: {
+  lead: Lead; pw: string; onClose: () => void; onSaved: (id: string, notes: string) => void
+}) {
+  const [notes, setNotes] = useState(lead.Notes || '')
+  const [saving, setSaving] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  // Pre-filled WhatsApp first contact message
+  const waMsg = `Bonjour ${lead.Nom} 👋\n\nJ'ai bien reçu votre demande${lead.Business && lead.Business !== '—' ? ` pour ${lead.Business}` : ''} — merci !\n\nJe suis [Votre prénom] de ${lead.Source === 'MonSalonVip' ? 'MonSalonVip' : 'Lightsofter'}.\n\nPour préparer votre site, j'ai besoin de quelques infos rapides :\n👉 https://${lead.Source === 'MonSalonVip' ? 'monsalonvip.vercel.app' : 'lightsofter.vercel.app'}/intake\n\nÀ tout de suite ! 💅`
+
+  function copyWA() {
+    navigator.clipboard.writeText(waMsg)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function save() {
+    setSaving(true)
+    await fetch('/api/crm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-crm-password': pw },
+      body: JSON.stringify({ action: 'updateLead', id: lead.ID, notes }),
+    })
+    setSaving(false)
+    onSaved(lead.ID, notes)
+    onClose()
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-gray-900 border border-gray-700 rounded-3xl p-6 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <h3 className="text-white font-black text-lg">{lead.Nom}</h3>
+            <p className="text-gray-400 text-xs mt-0.5">{lead.Business} · {lead.Ville} · {lead.Source}</p>
+          </div>
+          <button onClick={onClose} className="text-gray-500 hover:text-white text-xl leading-none">✕</button>
+        </div>
+
+        {/* WA message template */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-1.5">
+            <p className="text-gray-400 text-xs font-medium uppercase tracking-wider">Message WhatsApp — 1er contact</p>
+            <button onClick={copyWA}
+              className={`text-xs font-semibold px-3 py-1 rounded-lg transition ${copied ? 'bg-green-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'}`}>
+              {copied ? '✓ Copié !' : '📋 Copier'}
+            </button>
+          </div>
+          <div className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-xs text-gray-300 leading-relaxed whitespace-pre-wrap">
+            {waMsg}
+          </div>
+        </div>
+
+        {/* Notes */}
+        <div className="mb-4">
+          <label className="block text-gray-400 text-xs font-medium uppercase tracking-wider mb-1.5">Notes internes</label>
+          <textarea
+            value={notes} onChange={e => setNotes(e.target.value)} rows={4}
+            placeholder="Infos importantes, besoins spécifiques, résumé des échanges..."
+            className="w-full bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500 transition resize-none"
+          />
+        </div>
+
+        <div className="flex gap-3">
+          {lead.WhatsApp && lead.WhatsApp !== '—' && (
+            <a href={lead.WhatsApp} target="_blank" rel="noopener"
+              className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 rounded-xl text-sm transition">
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+              Ouvrir WhatsApp
+            </a>
+          )}
+          <button onClick={save} disabled={saving}
+            className="flex-1 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-bold py-2.5 rounded-xl text-sm transition">
+            {saving ? 'Sauvegarde...' : '💾 Sauvegarder'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── CSV Export ────────────────────────────────────────────────────────────────
+function exportCSV(leads: Lead[]) {
+  const headers = ['ID','Date','Source','Nom','Téléphone','Business','Ville','Secteur','Statut','Notes']
+  const rows = leads.map(l => headers.map(h => `"${(l[h as keyof Lead] || '').toString().replace(/"/g,'""')}"`).join(','))
+  const csv = [headers.join(','), ...rows].join('\n')
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url; a.download = `lightsofter-leads-${new Date().toISOString().split('T')[0]}.csv`
+  a.click(); URL.revokeObjectURL(url)
+}
+
 // ── Main CRM ──────────────────────────────────────────────────────────────────
 export default function CRMPage() {
   const [pw, setPw] = useState<string | null>(null)
@@ -177,6 +271,7 @@ export default function CRMPage() {
   const [search, setSearch] = useState('')
   const [showAddProject, setShowAddProject] = useState(false)
   const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
 
   // Check session
   useEffect(() => {
@@ -222,6 +317,10 @@ export default function CRMPage() {
     })
     setProjects(prev => prev.map(p => p.ID === id ? { ...p, Statut: status } : p))
     setUpdatingId(null)
+  }
+
+  function saveLeadNotes(id: string, notes: string) {
+    setLeads(prev => prev.map(l => l.ID === id ? { ...l, Notes: notes } : l))
   }
 
   if (!pw) return <AuthScreen onAuth={p => setPw(p)} />
@@ -305,12 +404,20 @@ export default function CRMPage() {
               </button>
             ))}
           </div>
-          {tab === 'projects' && (
-            <button onClick={() => setShowAddProject(true)}
-              className="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2 rounded-xl text-sm transition">
-              + Nouveau projet
-            </button>
-          )}
+          <div className="flex gap-2">
+            {tab === 'leads' && (
+              <button onClick={() => exportCSV(filteredLeads)}
+                className="border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 font-medium px-4 py-2 rounded-xl text-sm transition">
+                ↓ CSV
+              </button>
+            )}
+            {tab === 'projects' && (
+              <button onClick={() => setShowAddProject(true)}
+                className="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2 rounded-xl text-sm transition">
+                + Nouveau projet
+              </button>
+            )}
+          </div>
         </div>
 
         {/* ── FILTERS ───────────────────────────────────────────── */}
@@ -354,21 +461,24 @@ export default function CRMPage() {
                 <table className="w-full text-sm">
                   <thead className="bg-gray-800 text-gray-400 text-xs uppercase">
                     <tr>
-                      {['Date','Source','Nom','Business / Ville','Téléphone','Statut','Actions'].map(h => (
+                      {['Date','Source','Nom','Business / Ville','Téléphone','Notes','Statut','Actions'].map(h => (
                         <th key={h} className="px-4 py-3 text-left font-semibold">{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-800">
                     {filteredLeads.map(lead => (
-                      <tr key={lead.ID} className="hover:bg-gray-800/50 transition-colors">
+                      <tr key={lead.ID} className="hover:bg-gray-800/50 transition-colors group">
                         <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{lead.Date?.split(' ')[0] || '—'}</td>
                         <td className="px-4 py-3">
                           <span className={`text-xs font-semibold px-2 py-1 rounded-full ${SOURCE_COLORS[lead.Source] || 'bg-gray-700 text-gray-300'}`}>
                             {lead.Source || '—'}
                           </span>
                         </td>
-                        <td className="px-4 py-3 font-semibold text-white">{lead.Nom || '—'}</td>
+                        <td className="px-4 py-3 font-semibold text-white cursor-pointer hover:text-purple-300 transition"
+                          onClick={() => setSelectedLead(lead)}>
+                          {lead.Nom || '—'}
+                        </td>
                         <td className="px-4 py-3">
                           <p className="text-white text-xs">{lead.Business || '—'}</p>
                           <p className="text-gray-500 text-xs">{lead.Ville || ''}</p>
@@ -383,6 +493,19 @@ export default function CRMPage() {
                             <span className="text-gray-500 text-xs">{lead.Téléphone || '—'}</span>
                           )}
                         </td>
+                        <td className="px-4 py-3 max-w-[160px]">
+                          {lead.Notes && lead.Notes !== '—' ? (
+                            <p className="text-gray-400 text-xs truncate cursor-pointer hover:text-white transition"
+                              onClick={() => setSelectedLead(lead)} title={lead.Notes}>
+                              {lead.Notes}
+                            </p>
+                          ) : (
+                            <button onClick={() => setSelectedLead(lead)}
+                              className="text-gray-600 hover:text-gray-400 text-xs transition opacity-0 group-hover:opacity-100">
+                              + Ajouter
+                            </button>
+                          )}
+                        </td>
                         <td className="px-4 py-3">
                           <select
                             value={lead.Statut || 'Nouveau'}
@@ -394,13 +517,17 @@ export default function CRMPage() {
                           </select>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="flex gap-2">
+                          <div className="flex gap-1.5">
                             {lead.WhatsApp && lead.WhatsApp !== '—' && (
                               <a href={lead.WhatsApp} target="_blank" rel="noopener"
-                                className="bg-green-600 hover:bg-green-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition">
+                                className="bg-green-600 hover:bg-green-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-medium transition">
                                 WA
                               </a>
                             )}
+                            <button onClick={() => setSelectedLead(lead)}
+                              className="bg-gray-700 hover:bg-gray-600 text-gray-300 px-2.5 py-1.5 rounded-lg text-xs transition">
+                              ✏️
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -472,6 +599,15 @@ export default function CRMPage() {
 
       {showAddProject && pw && (
         <AddProjectModal pw={pw} onClose={() => setShowAddProject(false)} onAdded={() => fetchData('projects', pw)} />
+      )}
+
+      {selectedLead && pw && (
+        <LeadNotesModal
+          lead={selectedLead}
+          pw={pw}
+          onClose={() => setSelectedLead(null)}
+          onSaved={(id, notes) => { saveLeadNotes(id, notes); setSelectedLead(null) }}
+        />
       )}
     </div>
   )
