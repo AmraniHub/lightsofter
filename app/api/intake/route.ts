@@ -83,10 +83,6 @@ export async function POST(req: Request) {
       })
 
       // 2. Auto-create a Project in CRM
-      const projectLabel: Record<string, string> = {
-        vitrine: 'Site vitrine', ecommerce: 'E-commerce', landing: 'Landing page',
-        refonte: 'Refonte', booking: 'Site + réservation', other: 'Autre',
-      }
       await fetch(scriptUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
