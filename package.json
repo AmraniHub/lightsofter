@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.99.0",
     "@stripe/stripe-js": "^9.5.0",
     "framer-motion": "^11.3.0",
     "gray-matter": "^4.0.3",

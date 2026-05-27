@@ -272,6 +272,17 @@ export default function CRMPage() {
   const [showAddProject, setShowAddProject] = useState(false)
   const [updatingId, setUpdatingId] = useState<string | null>(null)
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
+  const [agentLoading, setAgentLoading] = useState(false)
+  const [agentResult, setAgentResult] = useState<{
+    summary: string
+    actions: Array<{
+      leadId: string; leadName: string; priority: string
+      reason: string; waMessage: string; suggestedStatus: string; autoUpdate: boolean
+    }>
+    autoUpdated: string[]
+    leadsAnalyzed: number
+  } | null>(null)
+  const [showAgent, setShowAgent] = useState(false)
 
   // Check session
   useEffect(() => {
@@ -323,6 +334,27 @@ export default function CRMPage() {
     setLeads(prev => prev.map(l => l.ID === id ? { ...l, Notes: notes } : l))
   }
 
+  async function runAgent() {
+    if (!pw) return
+    setAgentLoading(true)
+    setAgentResult(null)
+    try {
+      const res = await fetch('/api/crm/agent', {
+        method: 'POST',
+        headers: { 'x-crm-password': pw },
+      })
+      const data = await res.json()
+      if (data.ok) {
+        setAgentResult(data)
+        setShowAgent(true)
+        // Refresh leads to reflect auto-updates
+        if (data.autoUpdated?.length > 0) fetchData('leads', pw)
+      }
+    } finally {
+      setAgentLoading(false)
+    }
+  }
+
   if (!pw) return <AuthScreen onAuth={p => setPw(p)} />
 
   // ── Filter leads ──────────────────────────────────────────────────────────
@@ -363,6 +395,10 @@ export default function CRMPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <button onClick={runAgent} disabled={agentLoading}
+              className="flex items-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-60 text-white font-bold text-sm px-4 py-2 rounded-xl transition shadow-lg shadow-purple-900/30">
+              {agentLoading ? '⏳ Analyse...' : '🤖 Agent IA'}
+            </button>
             <button onClick={() => fetchData(tab, pw)}
               className="text-gray-400 hover:text-white text-sm px-3 py-1.5 rounded-lg hover:bg-gray-800 transition">
               ↻ Refresh
@@ -609,6 +645,105 @@ export default function CRMPage() {
           onSaved={(id, notes) => { saveLeadNotes(id, notes); setSelectedLead(null) }}
         />
       )}
+
+      {/* ── AI AGENT PANEL ───────────────────────────────────────── */}
+      {showAgent && agentResult && (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4" onClick={() => setShowAgent(false)}>
+          <div className="bg-gray-900 border border-purple-800/40 rounded-3xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-lg">🤖</div>
+                <div>
+                  <h3 className="text-white font-black">Agent IA — Rapport CRM</h3>
+                  <p className="text-gray-500 text-xs">{agentResult.leadsAnalyzed} leads analysés</p>
+                </div>
+              </div>
+              <button onClick={() => setShowAgent(false)} className="text-gray-500 hover:text-white text-xl">✕</button>
+            </div>
+
+            {/* Summary */}
+            <div className="bg-purple-950/30 border border-purple-800/30 rounded-2xl p-4 mb-5">
+              <p className="text-purple-200 text-sm leading-relaxed">💡 {(agentResult as any).analysis?.summary}</p>
+            </div>
+
+            {/* Auto-updated */}
+            {agentResult.autoUpdated?.length > 0 && (
+              <div className="bg-green-900/20 border border-green-800/30 rounded-xl px-4 py-3 mb-5">
+                <p className="text-green-400 text-sm font-semibold">
+                  ✅ {agentResult.autoUpdated.length} statut(s) mis à jour automatiquement
+                </p>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div className="space-y-4">
+              {(agentResult as any).analysis?.actions?.map((action: any, i: number) => (
+                <AgentActionCard key={i} action={action} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Agent Action Card ─────────────────────────────────────────────────────────
+function AgentActionCard({ action }: {
+  action: {
+    leadId: string; leadName: string; priority: string
+    reason: string; waMessage: string; suggestedStatus: string; autoUpdate: boolean
+  }
+}) {
+  const [copied, setCopied] = useState(false)
+
+  function copy() {
+    navigator.clipboard.writeText(action.waMessage)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const priorityColor = action.priority === 'high'
+    ? 'border-red-800/40 bg-red-950/20'
+    : action.priority === 'medium'
+    ? 'border-yellow-800/40 bg-yellow-950/10'
+    : 'border-gray-700 bg-gray-800/30'
+
+  const priorityBadge = action.priority === 'high'
+    ? 'bg-red-600/20 text-red-400'
+    : action.priority === 'medium'
+    ? 'bg-yellow-600/20 text-yellow-400'
+    : 'bg-gray-700 text-gray-400'
+
+  return (
+    <div className={`border rounded-2xl p-4 space-y-3 ${priorityColor}`}>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-white font-bold text-sm">{action.leadName}</span>
+          {action.autoUpdate && (
+            <span className="text-xs bg-green-600/20 text-green-400 px-2 py-0.5 rounded-full">✓ Auto-mis à jour</span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${priorityBadge}`}>
+            {action.priority === 'high' ? '🚨 Urgent' : action.priority === 'medium' ? '⚠️ Moyen' : '• Bas'}
+          </span>
+          {action.suggestedStatus && (
+            <span className="text-xs text-gray-400">→ <span className="text-white">{action.suggestedStatus}</span></span>
+          )}
+        </div>
+      </div>
+      <p className="text-gray-400 text-xs">{action.reason}</p>
+      <div className="bg-gray-900/60 rounded-xl p-3">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-gray-500 text-xs font-medium uppercase tracking-wider">Message WhatsApp</p>
+          <button onClick={copy}
+            className={`text-xs px-3 py-1 rounded-lg font-medium transition ${copied ? 'bg-green-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'}`}>
+            {copied ? '✓ Copié' : '📋 Copier'}
+          </button>
+        </div>
+        <p className="text-gray-300 text-xs leading-relaxed whitespace-pre-wrap">{action.waMessage}</p>
+      </div>
     </div>
   )
 }

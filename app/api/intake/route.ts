@@ -48,6 +48,7 @@ export async function POST(req: Request) {
 
     // ── Google Sheets ─────────────────────────────────────────────────────────
     if (scriptUrl) {
+      // 1. Save full intake details
       await fetch(scriptUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -78,6 +79,33 @@ export async function POST(req: Request) {
           googleMaps:  body.googleMaps || '—',
           extraNote:   body.extraNote || '—',
           submittedAt: body.submittedAt || new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }),
+        }),
+      })
+
+      // 2. Auto-create a Project in CRM
+      const projectLabel: Record<string, string> = {
+        vitrine: 'Site vitrine', ecommerce: 'E-commerce', landing: 'Landing page',
+        refonte: 'Refonte', booking: 'Site + réservation', other: 'Autre',
+      }
+      await fetch(scriptUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action:    'addProject',
+          client:    body.ownerName || '—',
+          business:  body.company || '—',
+          type:      projectLabel[body.projectType] || body.projectType || 'Site vitrine',
+          status:    'Brief',
+          price:     body.budget || '490',
+          startDate: new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }),
+          dueDate:   body.deadline || '—',
+          url:       body.existingUrl || '—',
+          notes:     [
+            body.sector   ? `Secteur: ${body.sector}` : null,
+            body.palette  ? `Palette: ${body.palette}` : null,
+            body.style    ? `Style: ${body.style}` : null,
+            body.extraNote ? `Note: ${body.extraNote}` : null,
+          ].filter(Boolean).join(' | ') || '—',
         }),
       })
     }
