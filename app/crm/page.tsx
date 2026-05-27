@@ -67,7 +67,7 @@ function AuthScreen({ onAuth }: { onAuth: (p: string) => void }) {
     const res = await fetch('/api/crm?type=leads', {
       headers: { 'x-crm-password': pw },
     })
-    if (res.ok) {
+    if (res.status !== 401) {
       sessionStorage.setItem('crm_pw', pw)
       onAuth(pw)
     } else {
