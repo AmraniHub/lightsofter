@@ -52,6 +52,7 @@ const STATUS_COLORS: Record<string, string> = {
 const SOURCE_COLORS: Record<string, string> = {
   MonSalonVip:  'bg-pink-100 text-pink-700',
   Lightsofter:  'bg-purple-100 text-purple-700',
+  AmraniAds:    'bg-orange-100 text-orange-700',
   'Meta Ads':   'bg-blue-100 text-blue-700',
   Organic:      'bg-green-100 text-green-700',
   Referral:     'bg-yellow-100 text-yellow-700',
@@ -373,11 +374,12 @@ export default function CRMPage() {
 
   // ── Stats ─────────────────────────────────────────────────────────────────
   const stats = {
-    total:    leads.length,
-    nouveau:  leads.filter(l => l.Statut === 'Nouveau').length,
-    clients:  leads.filter(l => l.Statut === 'Client').length,
-    salons:   leads.filter(l => l.Source === 'MonSalonVip').length,
-    revenue:  projects.filter(p => p.Statut !== 'Archivé').reduce((s, p) => s + (parseFloat(p['Prix (€)']) || 0), 0),
+    total:      leads.length,
+    nouveau:    leads.filter(l => l.Statut === 'Nouveau').length,
+    clients:    leads.filter(l => l.Statut === 'Client').length,
+    salons:     leads.filter(l => l.Source === 'MonSalonVip').length,
+    amraniads:  leads.filter(l => l.Source === 'AmraniAds').length,
+    revenue:    projects.filter(p => p.Statut !== 'Archivé').reduce((s, p) => s + (parseFloat(p['Prix (€)']) || 0), 0),
     inProgress: projects.filter(p => p.Statut === 'En cours' || p.Statut === 'Brief').length,
   }
 
@@ -420,7 +422,8 @@ export default function CRMPage() {
             { label: 'Nouveaux', value: stats.nouveau, color: 'text-blue-400' },
             { label: 'Clients', value: stats.clients, color: 'text-green-400' },
             { label: 'Salons (MSV)', value: stats.salons, color: 'text-pink-400' },
-            { label: 'Projets actifs', value: stats.inProgress, color: 'text-orange-400' },
+            { label: 'AmraniAds', value: stats.amraniads, color: 'text-orange-400' },
+            { label: 'Projets actifs', value: stats.inProgress, color: 'text-yellow-400' },
             { label: 'CA projets', value: `${stats.revenue.toLocaleString('fr-FR')}€`, color: 'text-purple-400' },
           ].map(s => (
             <div key={s.label} className="bg-gray-900 border border-gray-800 rounded-2xl p-4 text-center">
