@@ -591,7 +591,7 @@ export default function CRMPage() {
                 <table className="w-full text-sm">
                   <thead className="bg-gray-800 text-gray-400 text-xs uppercase">
                     <tr>
-                      {['Date','Client','Business','Type','Prix','Livraison','Statut','URL'].map(h => (
+                      {['Date','Client','Business','Type','Prix','Livraison','Statut','URL','Portal'].map(h => (
                         <th key={h} className="px-4 py-3 text-left font-semibold">{h}</th>
                       ))}
                     </tr>
@@ -624,6 +624,9 @@ export default function CRMPage() {
                               Voir →
                             </a>
                           ) : <span className="text-gray-600 text-xs">—</span>}
+                        </td>
+                        <td className="px-4 py-3">
+                          <PortalLinkBtn projectId={proj.ID} />
                         </td>
                       </tr>
                     ))}
@@ -750,3 +753,25 @@ function AgentActionCard({ action }: {
     </div>
   )
 }
+
+// ── Portal Link Button ────────────────────────────────────────────────────────
+function PortalLinkBtn({ projectId }: { projectId: string }) {
+  const [copied, setCopied] = useState(false)
+  const url = `${typeof window !== 'undefined' ? window.location.origin : 'https://lightsofter.vercel.app'}/portal/${projectId}`
+
+  function copy() {
+    navigator.clipboard.writeText(url)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <button onClick={copy}
+      className={`text-xs px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap ${
+        copied ? 'bg-green-600 text-white' : 'bg-indigo-900/50 text-indigo-400 hover:bg-indigo-800/60'
+      }`}>
+      {copied ? '✓ Copié !' : '🔗 Lien client'}
+    </button>
+  )
+}
+
