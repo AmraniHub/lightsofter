@@ -37,6 +37,8 @@ export default function Home() {
     { name: 'Marie L.', role: locale === 'en' ? 'Restaurant owner' : 'Restauratrice', city: 'Paris 🇫🇷', text: locale === 'en' ? 'Site delivered in under 24h. Since then, our online bookings have exploded. Ultra-responsive team.' : 'Site livré en moins de 24h. Depuis, nos réservations en ligne ont explosé. Équipe ultra réactive.', rating: 5 },
     { name: 'Thomas D.', role: locale === 'en' ? 'Pharmacist' : 'Pharmacien', city: 'Bruxelles 🇧🇪', text: locale === 'en' ? 'Our Android app transformed how we manage prescriptions. Results far beyond expectations.' : 'Notre app Android a transformé notre gestion des ordonnances. Résultat bien au-delà de nos attentes.', rating: 5 },
     { name: 'Sophie M.', role: locale === 'en' ? 'Notary' : 'Notaire', city: 'Lyon 🇫🇷', text: locale === 'en' ? 'Brief understood first time, fast revisions. Our firm finally has a proper online presence.' : 'Brief compris du premier coup, révisions rapides. Cabinet enfin présent sur le web de façon pro.', rating: 5 },
+    { name: 'Nicolas R.', role: locale === 'en' ? 'Financial advisor' : 'Conseiller financier', city: 'Genève 🇨🇭', text: locale === 'en' ? 'Premium result, transparent price. My Swiss clients immediately trusted the new site.' : 'Résultat premium, prix transparent. Mes clients suisses ont immédiatement fait confiance au nouveau site.', rating: 5 },
+    { name: 'Isabelle C.', role: locale === 'en' ? 'Luxury boutique owner' : 'Gérante boutique luxe', city: 'Monaco 🇲🇨', text: locale === 'en' ? 'Elegant design perfectly suited to our Monaco clientele. Delivered in 2 days, impeccable.' : 'Design élégant parfaitement adapté à notre clientèle monégasque. Livré en 2 jours, impeccable.', rating: 5 },
   ]
 
   return (

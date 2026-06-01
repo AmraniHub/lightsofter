@@ -295,6 +295,8 @@ export default function OrderPage() {
                   className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500">
                   <option value="FR">France</option>
                   <option value="BE">Belgique</option>
+                  <option value="CH">Suisse</option>
+                  <option value="MC">Monaco</option>
                   <option value="MA">Maroc</option>
                   <option value="other">Autre</option>
                 </select>

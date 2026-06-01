@@ -8,9 +8,9 @@ import ChatWidget from '@/components/ChatWidget'
 import { LangProvider } from '@/components/LangProvider'
 
 export const metadata: Metadata = {
-  title: 'Lightsofter — Sites Web & Applications Mobiles | France & Belgique',
-  description: 'Création de sites web professionnels et applications mobiles pour les PME en France et Belgique. Livraison en 2-3 jours, prix transparent, devis gratuit en 24h.',
-  keywords: 'création site web PME France, agence web Belgique, application Android, développement web rapide, site vitrine professionnel',
+  title: 'Lightsofter — Sites Web & Applications Mobiles | France, Belgique, Suisse & Monaco',
+  description: 'Création de sites web professionnels et applications mobiles pour les PME en France, Belgique, Suisse et Monaco. Livraison en 2-3 jours, prix transparent, devis gratuit en 24h.',
+  keywords: 'création site web PME France, agence web Belgique, création site web Suisse, site web Monaco, application Android, développement web rapide, site vitrine professionnel',
   metadataBase: new URL('https://lightsofter.vercel.app'),
   alternates: { canonical: 'https://lightsofter.vercel.app' },
   openGraph: {
@@ -42,14 +42,14 @@ const schemaOrg = {
       name: 'Lightsofter',
       url: 'https://lightsofter.vercel.app',
       logo: { '@type': 'ImageObject', url: 'https://lightsofter.vercel.app/logo.png' },
-      description: 'Agence de création de sites web et applications mobiles pour les PME en France et Belgique.',
+      description: 'Agence de création de sites web et applications mobiles pour les PME en France, Belgique, Suisse et Monaco.',
       contactPoint: {
         '@type': 'ContactPoint',
         telephone: '+212627716149',
         contactType: 'customer service',
         availableLanguage: ['French', 'English'],
       },
-      areaServed: ['FR', 'BE'],
+      areaServed: ['FR', 'BE', 'CH', 'MC'],
       sameAs: ['https://github.com/AmraniHub'],
     },
     {
@@ -70,7 +70,7 @@ const schemaOrg = {
       name: 'Lightsofter — Création de sites web',
       image: 'https://lightsofter.vercel.app/logo.png',
       priceRange: '€€',
-      areaServed: [{ '@type': 'Country', name: 'France' }, { '@type': 'Country', name: 'Belgium' }],
+      areaServed: [{ '@type': 'Country', name: 'France' }, { '@type': 'Country', name: 'Belgium' }, { '@type': 'Country', name: 'Switzerland' }, { '@type': 'Country', name: 'Monaco' }],
       hasOfferCatalog: {
         '@type': 'OfferCatalog',
         name: 'Services de développement web',

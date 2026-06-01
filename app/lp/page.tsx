@@ -201,7 +201,7 @@ export default function LandingPage() {
                 ))}
               </div>
               <p className="text-gray-400 text-sm">
-                <span className="text-white font-semibold">+50 PME</span> en France et Belgique nous font confiance
+                <span className="text-white font-semibold">+50 PME</span> en France, Belgique, Suisse et Monaco nous font confiance
               </p>
             </div>
           </div>
@@ -238,6 +238,8 @@ export default function LandingPage() {
                     >
                       <option value="FR">🇫🇷 +33</option>
                       <option value="BE">🇧🇪 +32</option>
+                      <option value="CH">🇨🇭 +41</option>
+                      <option value="MC">🇲🇨 +377</option>
                     </select>
                     <input
                       type="tel"

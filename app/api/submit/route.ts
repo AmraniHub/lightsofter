@@ -25,7 +25,7 @@ async function appendToSheet(data: SubmitBody) {
       name:     data.name,
       phone:    data.phone || '—',
       business: data.email || '—',   // email stored in business field (no email column in Leads sheet)
-      city:     data.locale === 'en' ? 'Belgium/International' : 'France',
+      city:     data.locale === 'en' ? 'Belgique/Suisse/Monaco/International' : 'France/Suisse/Monaco',
       sector:   data.type || '—',
       notes:    [
         data.goal   ? `Objectif: ${data.goal}` : null,
