@@ -112,34 +112,48 @@ export default function LandingPage() {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center px-6">
         <div className="text-center max-w-md">
-          <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+          {/* Animated checkmark */}
+          <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-900/40">
             <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h1 className="text-3xl font-black text-white mb-3">Demande envoyée ✅</h1>
+          <h1 className="text-3xl font-black text-white mb-3">Demande reçue ✅</h1>
           <p className="text-gray-400 text-lg mb-2">
             Merci <span className="text-white font-semibold">{form.name}</span> !
           </p>
-          <p className="text-gray-400 mb-8">
-            Vous recevrez votre devis personnalisé <span className="text-purple-400 font-bold">dans les 24 heures</span>.<br />
-            On vous contacte directement sur le <span className="text-white">{form.phone}</span>.
-          </p>
-          <div className="bg-purple-900/30 border border-purple-700/40 rounded-2xl p-5 text-left space-y-3">
-            <p className="text-white font-semibold text-sm">🚀 Ce qui se passe maintenant :</p>
-            <div className="flex items-start gap-3 text-sm text-gray-300">
-              <span className="text-purple-400 font-bold mt-0.5">1.</span>
-              <span>On analyse votre secteur et prépare une maquette adaptée</span>
-            </div>
-            <div className="flex items-start gap-3 text-sm text-gray-300">
-              <span className="text-purple-400 font-bold mt-0.5">2.</span>
-              <span>Vous recevez un devis précis sous 24h (prix fixe, pas de mauvaises surprises)</span>
-            </div>
-            <div className="flex items-start gap-3 text-sm text-gray-300">
-              <span className="text-purple-400 font-bold mt-0.5">3.</span>
-              <span>Dès validation, votre site est en ligne sous 24-28h</span>
-            </div>
+
+          {/* Instant contact badge */}
+          <div className="inline-flex items-center gap-2 bg-green-900/30 border border-green-700/40 rounded-full px-4 py-2 text-green-400 text-sm font-semibold mb-6">
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            Notre équipe vous contacte dans les prochaines minutes
           </div>
+
+          <p className="text-gray-400 mb-8 text-sm leading-relaxed">
+            Vous serez contacté sur le <span className="text-white font-bold">{form.phone}</span> — restez disponible.<br/>
+            <span className="text-purple-400 font-semibold">Votre site sera en ligne dans 24h</span> après validation.
+          </p>
+
+          <div className="bg-purple-900/20 border border-purple-700/30 rounded-2xl p-5 text-left space-y-4">
+            <p className="text-white font-bold text-sm">🚀 Ce qui se passe maintenant :</p>
+            {[
+              { n: '1', icon: '💬', text: 'Notre équipe vous contacte instantanément par WhatsApp ou téléphone' },
+              { n: '2', icon: '🎨', text: 'On prépare votre maquette et vous envoyons un devis précis (prix fixe)' },
+              { n: '3', icon: '⚡', text: 'Dès votre validation — votre site est en ligne en 24h chrono' },
+            ].map(s => (
+              <div key={s.n} className="flex items-start gap-3 text-sm">
+                <span className="text-purple-400 font-black mt-0.5 w-4 shrink-0">{s.n}.</span>
+                <span className="text-gray-300">{s.icon} {s.text}</span>
+              </div>
+            ))}
+          </div>
+
+          <a href={`https://wa.me/212627716149?text=Bonjour, je viens de soumettre ma demande (${form.name})`}
+            target="_blank" rel="noopener"
+            className="mt-6 w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-xl text-sm transition">
+            <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Nous écrire sur WhatsApp maintenant
+          </a>
         </div>
       </div>
     )
@@ -181,11 +195,11 @@ export default function LandingPage() {
             {/* Trust points */}
             <ul className="space-y-2.5 mb-8">
               {[
-                '✅ Site livré en 24 à 28 heures après validation',
-                '✅ Prix fixe — pas de surprise en cours de projet',
-                '✅ SEO de base inclus dès le départ',
+                '⚡ Votre site en ligne en 24h — garanti',
+                '💬 Notre équipe vous contacte instantanément après votre demande',
+                '✅ Prix fixe dès le départ — aucune surprise',
+                '✅ SEO de base inclus',
                 '✅ Support WhatsApp inclus après livraison',
-                '✅ Devis gratuit envoyé sous 24h',
               ].map(item => (
                 <li key={item} className="text-gray-300 text-sm flex items-start gap-2">
                   <span>{item}</span>
