@@ -7,8 +7,8 @@ const PAYONEER_LINK  = 'https://payoneer.com/pay' // Replace with your Payoneer 
 const PAYPAL_LINK    = 'https://paypal.me/VOTRE_USERNAME' // Replace with your PayPal.me link
 const IBAN           = 'FR76 XXXX XXXX XXXX XXXX XXXX XXX' // Replace with your IBAN
 const BIC            = 'XXXXXXXX'                           // Replace with your BIC
-const BANK_NAME      = 'Votre banque'                       // Replace with your bank name
-const ACCOUNT_NAME   = 'Amrani Elias'                       // Replace with your name
+const BANK_NAME      = 'CIH Bank'
+const ACCOUNT_NAME   = 'Abdelali El Amrani'
 
 const SECTORS = [
   'Restaurant / Bar', 'Artisan / Bâtiment', 'Coach / Consultant',
