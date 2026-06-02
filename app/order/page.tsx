@@ -8,7 +8,7 @@ const PAYPAL_LINK    = 'https://paypal.me/abdellalibusiness'
 const IBAN           = 'MA64 2307 2023 8550 4211 0086 0015'
 const BIC            = 'CIHMMAMC'
 const BANK_NAME      = 'CIH Bank'
-const ACCOUNT_NAME   = 'Abdelali El Amrani'
+const ACCOUNT_NAME   = 'Lightsofter Co'
 
 const SECTORS = [
   'Restaurant / Bar', 'Artisan / Bâtiment', 'Coach / Consultant',
