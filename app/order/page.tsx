@@ -4,9 +4,9 @@ import { useState } from 'react'
 // ── Payment details — update these with your real info ────────────────────────
 const PAYONEER_EMAIL = 'amrani4online@gmail.com'
 const PAYONEER_LINK  = 'https://payoneer.com/pay' // Replace with your Payoneer payment link
-const PAYPAL_LINK    = 'https://paypal.me/VOTRE_USERNAME' // Replace with your PayPal.me link
-const IBAN           = 'FR76 XXXX XXXX XXXX XXXX XXXX XXX' // Replace with your IBAN
-const BIC            = 'XXXXXXXX'                           // Replace with your BIC
+const PAYPAL_LINK    = 'https://paypal.me/abdellalibusiness'
+const IBAN           = 'MA64 2307 2023 8550 4211 0086 0015'
+const BIC            = 'CIHMMAMC'
 const BANK_NAME      = 'CIH Bank'
 const ACCOUNT_NAME   = 'Abdelali El Amrani'
 
