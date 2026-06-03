@@ -28,6 +28,12 @@ export const metadata: Metadata = {
     images: ['/logo.png'],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+  other: {
+    'geo.region':    'FR',
+    'geo.placename': 'France',
+    'geo.position':  '46.2276;2.2137',
+    'ICBM':          '46.2276, 2.2137',
+  },
   icons: { icon: '/logo.png', apple: '/logo.png' },
 }
 
